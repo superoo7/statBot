@@ -19,6 +19,13 @@ This is a discord bot that are able to consume Steem API.
 
 * Type `!tag <tag_name>` to get details on votes, comments, topics and pending payout of that certain tags in past 7 days
 
+# Developer Part
+
+* Change `.env.sample` to `.env`
+* Add your own [Discord Token](https://github.com/reactiflux/discord-irc/wiki/Creating-a-discord-bot-&-getting-a-token)
+
+# Feel free to file issue and PR
+
 # License
 
 MIT

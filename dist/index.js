@@ -87,7 +87,7 @@ client.on('message', function (msg) {
                 break;
             case 'tag':
                 msg.reply('Connecting to database....');
-                var query = '\nselect\n SUM(net_votes) as Votes,\n SUM(pending_payout_value) as PendingPayouts,\n SUM(children) as Comments,\n COUNT(*) as Posts\nfrom\n Comments (NOLOCK)\nwhere\n dirty = \'False\' and\n json_metadata LIKE(\'%"malaysia"%\') and\n  parent_author = \'\' and\n datediff(day, created, GETDATE()) between 0 and 7\norder by\n Votes desc\n\n\n                     ';
+                var query = '\nselect\n SUM(net_votes) as Votes,\n SUM(pending_payout_value) as PendingPayouts,\n SUM(children) as Comments,\n COUNT(*) as Posts\nfrom\n Comments (NOLOCK)\nwhere\n dirty = \'False\' and\n json_metadata LIKE(\'%"' + args[0] + '"%\') and\n  parent_author = \'\' and\n datediff(day, created, GETDATE()) between 0 and 7\norder by\n Votes desc\n\n\n                     ';
 
                 var querying = function () {
                     var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(query, tag) {

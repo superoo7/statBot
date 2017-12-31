@@ -86,7 +86,7 @@ from
  Comments (NOLOCK)
 where
  dirty = 'False' and
- json_metadata LIKE('%"malaysia"%') and
+ json_metadata LIKE('%"${args[0]}"%') and
   parent_author = '' and
  datediff(day, created, GETDATE()) between 0 and 7
 order by

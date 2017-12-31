@@ -29,6 +29,7 @@ client.on('message', msg => {
         args = args.splice(1);
         logger.info(`CMD: ${cmd}`);
         logger.info(`ARGS: ${args}`);
+        console.log(args);
         let message;
         switch (cmd) {
             case 'help':
@@ -39,18 +40,31 @@ client.on('message', msg => {
                 `;
                 msg.reply(message);
                 break;
-            case 'user':
-                steem.api.getAccounts(args, function(err, result) {
-                    if (!!result[0]) {
-                        console.log(result[0]);
-                        console.log(JSON.parse(result[0].json_metadata));
+            case 'history':
+                steem.api.getAccountReferences(args, function(err, result) {
+                    console.log(err, result);
+                });
+                break;
 
-                        message = `@${result[0].name} has ${
-                            result[0].voting_power
-                        }💪 and his about said that "${
-                            JSON.parse(result[0].json_metadata).profile.about
-                        }"`;
-                        msg.reply(message);
+            case 'user':
+                steem.api.getAccounts(args, function(err, results) {
+                    if (!!results[0]) {
+                        results.map(result => {
+                            if (!!result) {
+                                console.log(result);
+                                console.log(JSON.parse(result.json_metadata));
+
+                                message = `@${result.name} has ${
+                                    result.voting_power
+                                }💪 and his about said that "${
+                                    JSON.parse(result.json_metadata).profile
+                                        .about
+                                }"`;
+                                msg.reply(message);
+                            } else {
+                                msg.reply('User not found');
+                            }
+                        });
                     } else {
                         msg.reply('User not found');
                     }

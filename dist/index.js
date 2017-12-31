@@ -16,6 +16,10 @@ var _steem = require('steem');
 
 var steem = _interopRequireWildcard(_steem);
 
+var _http = require('http');
+
+var http = _interopRequireWildcard(_http);
+
 require('babel-polyfill');
 
 var _db = require('./db');
@@ -45,20 +49,33 @@ client.on('message', function (msg) {
         args = args.splice(1);
         logger.info('CMD: ' + cmd);
         logger.info('ARGS: ' + args);
+        console.log(args);
         var message = void 0;
         switch (cmd) {
             case 'help':
                 message = 'statBot HELP\n\n                Type `!ping` to get bot reply \'pong\'\n\n                Type `!user <steem_name>` to get details of that person (without @)\n\n                Type `!tag <tag_name>` to get details on votes, comments, topics and pending payout of that certain tags in past 7 days\n                ';
                 msg.reply(message);
                 break;
-            case 'user':
-                steem.api.getAccounts(args, function (err, result) {
-                    if (!!result[0]) {
-                        console.log(result[0]);
-                        console.log(JSON.parse(result[0].json_metadata));
+            case 'history':
+                steem.api.getAccountReferences(args, function (err, result) {
+                    console.log(err, result);
+                });
+                break;
 
-                        message = '@' + result[0].name + ' has ' + result[0].voting_power + '\uD83D\uDCAA and his about said that "' + JSON.parse(result[0].json_metadata).profile.about + '"';
-                        msg.reply(message);
+            case 'user':
+                steem.api.getAccounts(args, function (err, results) {
+                    if (!!results[0]) {
+                        results.map(function (result) {
+                            if (!!result) {
+                                console.log(result);
+                                console.log(JSON.parse(result.json_metadata));
+
+                                message = '@' + result.name + ' has ' + result.voting_power + '\uD83D\uDCAA and his about said that "' + JSON.parse(result.json_metadata).profile.about + '"';
+                                msg.reply(message);
+                            } else {
+                                msg.reply('User not found');
+                            }
+                        });
                     } else {
                         msg.reply('User not found');
                     }
@@ -111,4 +128,8 @@ client.on('message', function (msg) {
     }
 });
 client.login(process.env.DISCORD_TOKEN);
+http.createServer(function (request, response) {
+    response.writeHead(200, { 'Content-Type': contentType });
+    response.end(content, 'utf-8');
+}).listen(process.env.PORT || 5000);
 //# sourceMappingURL=index.js.map

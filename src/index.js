@@ -2,6 +2,7 @@ import * as Discord from 'discord.js';
 import * as logger from 'winston';
 import * as dotenv from 'dotenv';
 import * as steem from 'steem';
+
 import 'babel-polyfill';
 
 dotenv.config();
@@ -87,8 +88,8 @@ order by
                               `There is
                                ${result[0].Posts} posts 📘,
                                ${result[0].Votes} votes 👍,
-                               $${result[0].Votes} steem 💵,
-                               ${result[0].Votes} comments 💬,
+                               $${result[0].PendingPayouts} steem 💵,
+                               ${result[0].Comments} comments 💬,
                                on #${tag} in the past 7 days`
                           );
                 }

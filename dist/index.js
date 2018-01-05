@@ -20,9 +20,17 @@ var _http = require('http');
 
 var http = _interopRequireWildcard(_http);
 
+var _axios = require('axios');
+
+var _axios2 = _interopRequireDefault(_axios);
+
 require('babel-polyfill');
 
 var _db = require('./db');
+
+var _sql = require('./sql');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
@@ -53,7 +61,7 @@ client.on('message', function (msg) {
         var message = void 0;
         switch (cmd) {
             case 'help':
-                message = 'statBot HELP\n\n                Type `!ping` to get bot reply \'pong\'\n\n                Type `!user <steem_name>` to get details of that person (without @)\n\n                Type `!tag <tag_name>` to get details on votes, comments, topics and pending payout of that certain tags in past 7 days\n                ';
+                message = 'statBot HELP\n\n                Type `!ping` to get bot reply \'pong\'\n\n                Type `!user <steem_name>` to get details of that person (without @)\n\n                Type `!ratio ` to get steem to sbd ratio from Bittrex\n\n                Type `!tag <tag_name>` to get details on votes, comments, topics and pending payout of that certain tags in past 7 days\n                ';
                 msg.reply(message);
                 break;
             case 'history':
@@ -68,10 +76,15 @@ client.on('message', function (msg) {
                         results.map(function (result) {
                             if (!!result) {
                                 console.log(result);
-                                console.log(JSON.parse(result.json_metadata));
+                                var reputation = steem.formatter.reputation(result.reputation);
+                                var accountWorth = steem.formatter.estimateAccountValue(result);
 
-                                message = '@' + result.name + ' has ' + result.voting_power + '\uD83D\uDCAA and his about said that "' + JSON.parse(result.json_metadata).profile.about + '"';
-                                msg.reply(message);
+                                accountWorth.then(function (worth) {
+                                    message = '@' + result.name + ' says "' + JSON.parse(result.json_metadata).profile.about + '"\n                                and reputation: ' + reputation + ' \uD83D\uDD30\n                                and account worth: $' + worth + ' \uD83D\uDCB0\n                                ';
+                                    msg.reply(message);
+                                }).catch(function (err) {
+                                    console.log(err);
+                                });
                             } else {
                                 msg.reply('User not found');
                             }
@@ -87,7 +100,7 @@ client.on('message', function (msg) {
                 break;
             case 'tag':
                 msg.reply('Connecting to database....');
-                var query = '\nselect\n SUM(net_votes) as Votes,\n SUM(pending_payout_value) as PendingPayouts,\n SUM(children) as Comments,\n COUNT(*) as Posts\nfrom\n Comments (NOLOCK)\nwhere\n dirty = \'False\' and\n json_metadata LIKE(\'%"' + args[0] + '"%\') and\n  parent_author = \'\' and\n datediff(day, created, GETDATE()) between 0 and 7\norder by\n Votes desc\n\n\n                     ';
+                var query = (0, _sql.searchTag)(args[0]);
 
                 var querying = function () {
                     var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(query, tag) {
@@ -119,6 +132,30 @@ client.on('message', function (msg) {
                 }();
 
                 querying(query, args);
+                break;
+            case 'ratio':
+                var steemPrice = void 0;
+                var sbdPrice = void 0;
+                _axios2.default.get('https://bittrex.com/api/v1.1/public/getmarketsummary?market=btc-steem').then(function (res) {
+                    steemPrice = {
+                        low: res.data.result[0].Low,
+                        high: res.data.result[0].High
+                    };
+                    return _axios2.default.get('https://bittrex.com/api/v1.1/public/getmarketsummary?market=btc-sbd');
+                }).then(function (res) {
+                    sbdPrice = {
+                        low: res.data.result[0].Low,
+                        high: res.data.result[0].High
+                    };
+                    console.log(steemPrice);
+                    console.log(sbdPrice);
+                    var ratio = {
+                        low: steemPrice.low / sbdPrice.low,
+                        high: steemPrice.high / sbdPrice.high
+                    };
+                    console.log(ratio);
+                    msg.reply('ratio from bittrex: ' + ratio.low + ' <-> ' + ratio.high + ' steem/sbd');
+                });
                 break;
             default:
                 message = '`!help` to get started';

@@ -38,8 +38,7 @@ client.on('message', msg => {
                 message = `statBot HELP\n
                 Type \`!ping\` to get bot reply 'pong'\n
                 Type \`!user <steem_name>\` to get details of that person (without @)\n
-                Type \`!power <steem_name>\`
-                Type \`!ratio \` to get steem to sbd ratio from Bittrex
+                Type \`!ratio \` to get steem to sbd ratio from Bittrex\n
                 Type \`!tag <tag_name>\` to get details on votes, comments, topics and pending payout of that certain tags in past 7 days
                 `;
                 msg.reply(message);
@@ -137,7 +136,11 @@ client.on('message', msg => {
                             high: steemPrice.high / sbdPrice.high
                         };
                         console.log(ratio);
-                        msg.reply(ratio);
+                        msg.reply(
+                            `ratio from bittrex: ${ratio.low} <-> ${
+                                ratio.high
+                            } steem/sbd`
+                        );
                     });
                 break;
             default:

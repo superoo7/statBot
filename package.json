@@ -6,6 +6,7 @@
     "lint": "eslint src"
   },
   "dependencies": {
+    "axios": "^0.17.1",
     "babel-polyfill": "^6.26.0",
     "discord.io": "^2.5.3",
     "discord.js": "^11.2.1",

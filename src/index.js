@@ -3,12 +3,14 @@ import * as logger from 'winston';
 import * as dotenv from 'dotenv';
 import * as steem from 'steem';
 import * as http from 'http';
+import axios from 'axios';
 
 import 'babel-polyfill';
 
 dotenv.config();
 
 import { executeQuery } from './db';
+import { searchTag } from './sql';
 
 // setting
 const triggerBotKey = '!';
@@ -36,6 +38,8 @@ client.on('message', msg => {
                 message = `statBot HELP\n
                 Type \`!ping\` to get bot reply 'pong'\n
                 Type \`!user <steem_name>\` to get details of that person (without @)\n
+                Type \`!power <steem_name>\`
+                Type \`!ratio \` to get steem to sbd ratio from Bittrex
                 Type \`!tag <tag_name>\` to get details on votes, comments, topics and pending payout of that certain tags in past 7 days
                 `;
                 msg.reply(message);
@@ -52,15 +56,27 @@ client.on('message', msg => {
                         results.map(result => {
                             if (!!result) {
                                 console.log(result);
-                                console.log(JSON.parse(result.json_metadata));
+                                let reputation = steem.formatter.reputation(
+                                    result.reputation
+                                );
+                                let accountWorth = steem.formatter.estimateAccountValue(
+                                    result
+                                );
 
-                                message = `@${result.name} has ${
-                                    result.voting_power
-                                }💪 and his about said that "${
-                                    JSON.parse(result.json_metadata).profile
-                                        .about
-                                }"`;
-                                msg.reply(message);
+                                accountWorth
+                                    .then(worth => {
+                                        message = `@${result.name} says "${
+                                            JSON.parse(result.json_metadata)
+                                                .profile.about
+                                        }"
+                                and reputation: ${reputation} 🔰
+                                and account worth: $${worth} 💰
+                                `;
+                                        msg.reply(message);
+                                    })
+                                    .catch(err => {
+                                        console.log(err);
+                                    });
                             } else {
                                 msg.reply('User not found');
                             }
@@ -76,24 +92,7 @@ client.on('message', msg => {
                 break;
             case 'tag':
                 msg.reply('Connecting to database....');
-                const query = `
-select
- SUM(net_votes) as Votes,
- SUM(pending_payout_value) as PendingPayouts,
- SUM(children) as Comments,
- COUNT(*) as Posts
-from
- Comments (NOLOCK)
-where
- dirty = 'False' and
- json_metadata LIKE('%"${args[0]}"%') and
-  parent_author = '' and
- datediff(day, created, GETDATE()) between 0 and 7
-order by
- Votes desc
-
-
-                     `;
+                const query = searchTag(args[0]);
                 async function querying(query, tag) {
                     let result = await executeQuery(query);
                     console.log(result);
@@ -109,6 +108,37 @@ order by
                           );
                 }
                 querying(query, args);
+                break;
+            case 'ratio':
+                let steemPrice;
+                let sbdPrice;
+                axios
+                    .get(
+                        'https://bittrex.com/api/v1.1/public/getmarketsummary?market=btc-steem'
+                    )
+                    .then(res => {
+                        steemPrice = {
+                            low: res.data.result[0].Low,
+                            high: res.data.result[0].High
+                        };
+                        return axios.get(
+                            'https://bittrex.com/api/v1.1/public/getmarketsummary?market=btc-sbd'
+                        );
+                    })
+                    .then(res => {
+                        sbdPrice = {
+                            low: res.data.result[0].Low,
+                            high: res.data.result[0].High
+                        };
+                        console.log(steemPrice);
+                        console.log(sbdPrice);
+                        let ratio = {
+                            low: steemPrice.low / sbdPrice.low,
+                            high: steemPrice.high / sbdPrice.high
+                        };
+                        console.log(ratio);
+                        msg.reply(ratio);
+                    });
                 break;
             default:
                 message = '`!help` to get started';

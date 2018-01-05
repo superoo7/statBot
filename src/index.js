@@ -29,9 +29,11 @@ client.on('message', msg => {
         var args = msg.content.substring(1).split(' ');
         var cmd = args[0];
         args = args.splice(1);
+        // CONSOLE LOGGING
         logger.info(`CMD: ${cmd}`);
         logger.info(`ARGS: ${args}`);
         console.log(args);
+        // END
         let message;
         switch (cmd) {
             case 'help':
@@ -39,16 +41,11 @@ client.on('message', msg => {
                 Type \`!ping\` to get bot reply 'pong'\n
                 Type \`!user <steem_name>\` to get details of that person (without @)\n
                 Type \`!ratio \` to get steem to sbd ratio from Bittrex\n
-                Type \`!tag <tag_name>\` to get details on votes, comments, topics and pending payout of that certain tags in past 7 days
+                Type \`!tag <tag_name>\` to get details on votes, comments, topics and pending payout of that certain tags in past 7 days\n
+                Type \`!delete <message_id>\` to delete a message
                 `;
                 msg.reply(message);
                 break;
-            case 'history':
-                steem.api.getAccountReferences(args, function(err, result) {
-                    console.log(err, result);
-                });
-                break;
-
             case 'user':
                 steem.api.getAccounts(args, function(err, results) {
                     if (!!results[0]) {
@@ -142,6 +139,19 @@ client.on('message', msg => {
                             } steem/sbd`
                         );
                     });
+                break;
+            case 'delete':
+                msg.channel
+                    .fetchMessage(args[0])
+                    .then(message => {
+                        message
+                            .delete()
+                            .then(msg =>
+                                msg.reply(`Deleted message from ${msg.author}`)
+                            )
+                            .catch(console.error);
+                    })
+                    .catch(console.error);
                 break;
             default:
                 message = '`!help` to get started';

@@ -55,21 +55,17 @@ client.on('message', function (msg) {
         var args = msg.content.substring(1).split(' ');
         var cmd = args[0];
         args = args.splice(1);
+        // CONSOLE LOGGING
         logger.info('CMD: ' + cmd);
         logger.info('ARGS: ' + args);
         console.log(args);
+        // END
         var message = void 0;
         switch (cmd) {
             case 'help':
-                message = 'statBot HELP\n\n                Type `!ping` to get bot reply \'pong\'\n\n                Type `!user <steem_name>` to get details of that person (without @)\n\n                Type `!ratio ` to get steem to sbd ratio from Bittrex\n\n                Type `!tag <tag_name>` to get details on votes, comments, topics and pending payout of that certain tags in past 7 days\n                ';
+                message = 'statBot HELP\n\n                Type `!ping` to get bot reply \'pong\'\n\n                Type `!user <steem_name>` to get details of that person (without @)\n\n                Type `!ratio ` to get steem to sbd ratio from Bittrex\n\n                Type `!tag <tag_name>` to get details on votes, comments, topics and pending payout of that certain tags in past 7 days\n\n                Type `!delete <message_id>` to delete a message\n                ';
                 msg.reply(message);
                 break;
-            case 'history':
-                steem.api.getAccountReferences(args, function (err, result) {
-                    console.log(err, result);
-                });
-                break;
-
             case 'user':
                 steem.api.getAccounts(args, function (err, results) {
                     if (!!results[0]) {
@@ -156,6 +152,13 @@ client.on('message', function (msg) {
                     console.log(ratio);
                     msg.reply('ratio from bittrex: ' + ratio.low + ' <-> ' + ratio.high + ' steem/sbd');
                 });
+                break;
+            case 'delete':
+                msg.channel.fetchMessage(args[0]).then(function (message) {
+                    message.delete().then(function (msg) {
+                        return msg.reply('Deleted message from ' + msg.author);
+                    }).catch(console.error);
+                }).catch(console.error);
                 break;
             default:
                 message = '`!help` to get started';

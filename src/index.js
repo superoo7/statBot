@@ -11,7 +11,7 @@ dotenv.config();
 
 import { executeQuery } from './db';
 import { searchTag } from './sql';
-import { getDateTimeFromTimestamp } from './util';
+import { getDateTimeFromTimestamp, getRatio, getSteem, getSBD } from './util';
 
 import config from './config.json';
 
@@ -52,32 +52,25 @@ client.on('message', msg => {
             logger.info(`ARGS: ${args}`);
             console.log(args);
             // END
-            let message;
             switch (cmd) {
                 case 'info':
-                    message =
-                        'Created by @superoo7 on 2017-2018 (MIT LICENSE) https://github.com/superoo7/steem-discord';
-                    msg.reply(message);
+                    msg.reply(
+                        'Created by @superoo7 on 2017-2018 (MIT LICENSE) https://github.com/superoo7/steem-discord'
+                    );
                     break;
                 case 'help':
-                    message = `\n
-                    BEEP BEEP 🤖, statBot HELP\n
-                Type \`${config.trigger}ping\` to get bot reply 'pong'\n
-                Type \`${
-                    config.trigger
-                }user <steem_name>\` to get details of that person (without @)\n
-                Type \`${
-                    config.trigger
-                }ratio \` to get steem to sbd ratio from Bittrex\n
-                Type \`${
-                    config.trigger
-                }tag <tag_name>\` to get details on votes, comments, topics and pending payout of that certain tags in past 7 days\n
-                Type \`${
-                    config.trigger
-                }delete <message_id>\` to delete a message\n
-                Type \`${config.trigger}info\` to know more about this bot
-                `;
-                    msg.reply(message);
+                    msg.reply(`\n
+BEEP BEEP 🤖, statBot HELP\n
+Type \`${config.trigger}ping\` to get bot reply 'pong'\n
+Type \`${config.trigger}user <steem_name>\` to get details of that person\n
+Type \`${config.trigger}ratio\` to get steem to sbd ratio from coinmarketcap\n
+Type \`${config.trigger}steem\` to get steem price from coinmarketcap\n
+Type \`${config.trigger}sbd\` to get sbd price from coinmarketcap\n
+Type \`${
+                        config.trigger
+                    }tag <tag_name>\` to get details on votes, comments, topics and pending payout of that certain tags in past 7 days\n
+Type \`${config.trigger}info\` to know more about this bot
+                `);
                     break;
                 case 'user':
                     steem.api.getAccounts(args, function(err, results) {
@@ -138,87 +131,20 @@ client.on('message', msg => {
                     }
                     querying(query, args);
                     break;
+                case 'sbd':
+                    getSBD().then(data =>
+                        msg.reply(`SBD Price at ${data} USD`)
+                    );
+                    break;
+                case 'steem':
+                    getSteem().then(data =>
+                        msg.reply(`Steem Price at ${data} USD`)
+                    );
+                    break;
                 case 'ratio':
-                    let steemPrice;
-                    let sbdPrice;
-                    axios
-                        .get(
-                            'https://bittrex.com/api/v1.1/public/getmarketsummary?market=btc-steem'
-                        )
-                        .then(res => {
-                            steemPrice = {
-                                low: res.data.result[0].Low,
-                                high: res.data.result[0].High
-                            };
-                            return axios.get(
-                                'https://bittrex.com/api/v1.1/public/getmarketsummary?market=btc-sbd'
-                            );
-                        })
-                        .then(res => {
-                            sbdPrice = {
-                                low: res.data.result[0].Low,
-                                high: res.data.result[0].High
-                            };
-                            console.log(steemPrice);
-                            console.log(sbdPrice);
-                            let ratio = {
-                                low: steemPrice.low / sbdPrice.low,
-                                high: steemPrice.high / sbdPrice.high
-                            };
-                            console.log(ratio);
-                            msg.reply(
-                                `ratio from bittrex: ${ratio.low} <-> ${
-                                    ratio.high
-                                } steem/sbd`
-                            );
-                        });
-                    break;
-                case 'delete':
-                    msg.channel
-                        .fetchMessage(args[0])
-                        .then(message => {
-                            message
-                                .delete()
-                                .then(msg =>
-                                    msg.reply(
-                                        `Deleted message from ${msg.author}`
-                                    )
-                                )
-                                .catch(console.error);
-                        })
-                        .catch(console.error);
-                    break;
-                case 'fetch':
-                    msg.channel
-                        .fetchMessages({ limit: 100 })
-                        .then(messages => {
-                            console.log(`Received ${messages.size} messages`);
-                            let {
-                                author: {
-                                    username: lastUsername,
-                                    id: lastUserId
-                                },
-                                content: lastContent,
-                                createdTimestamp: lastCreatedTimestamp,
-                                id: lastMessageId
-                            } = messages.find(m => {
-                                let {
-                                    author: { id: lastUserId },
-                                    id: lastMessageId
-                                } = m;
-                                if (lastMessageId === currentMessageId) {
-                                    return false;
-                                }
-                                return currentUserId === lastUserId;
-                            });
-                            let lastCreatedTime = getDateTimeFromTimestamp(
-                                lastCreatedTimestamp
-                            );
-                            msg.reply(
-                                `${lastUsername} on ${lastCreatedTime} says that ${lastContent}`
-                            );
-                        })
-                        .catch(console.error);
+                    getRatio().then(data =>
+                        msg.reply(`steem/sbd ratio: ${data}`)
+                    );
                     break;
                 default:
                     message = `\`${config.trigger}help\` to get started`;

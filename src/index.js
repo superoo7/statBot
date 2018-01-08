@@ -87,14 +87,13 @@ Type \`${config.trigger}info\` to know more about this bot
 
                                     accountWorth
                                         .then(worth => {
-                                            message = `@${result.name} says "${
+                                            msg.reply(`@${result.name} says "${
                                                 JSON.parse(result.json_metadata)
                                                     .profile.about
                                             }"
                                 and reputation: ${reputation} 🔰
                                 and account worth: $${worth} 💰
-                                `;
-                                            msg.reply(message);
+                                `);
                                         })
                                         .catch(err => {
                                             console.log(err);
@@ -109,8 +108,7 @@ Type \`${config.trigger}info\` to know more about this bot
                     });
                     break;
                 case 'ping':
-                    message = 'Pong!';
-                    msg.reply(message);
+                    msg.reply('Pong!');
                     break;
                 case 'tag':
                     msg.reply('Connecting to database....');
@@ -147,8 +145,7 @@ Type \`${config.trigger}info\` to know more about this bot
                     );
                     break;
                 default:
-                    message = `\`${config.trigger}help\` to get started`;
-                    msg.reply(message);
+                    msg.reply(`\`${config.trigger}help\` to get started`);
                     break;
             }
         }

@@ -1,7 +1,5 @@
 # steem-discord bot
 
-[Implement this bot to your discord](https://discordapp.com/oauth2/authorize?&client_id=396821745840947211&scope=bot&permissions=0)
-
 # What is this?
 
 This is a discord bot that are able to consume Steem API, search Steem Price, use of SteemDB.
@@ -10,25 +8,26 @@ This is a discord bot that are able to consume Steem API, search Steem Price, us
 
 ## Function
 
+* Check convertion rate between crypto to crypto, fiat to crypto and crypto to fiat.
 * Check SBD, Steeem Price and ratio of Steem/SBD.
-* Check details of a person
-* Check the tags to get more details about it
+* Check details of a person.
+* Check the tags to get more details about it.
 
 ## Command
 
-* Type `.ping` to get bot reply 'pong'
+Type `%ping` to get bot reply 'pong'
 
-* Type `.user <steem_name>` to get details of that person
+Type `%tag <tag_name>` to get details on votes, comments, topics and pending payout of that certain tags in past 7 days
 
-* Type `.ratio` to get steem to sbd ratio from coinmarketcap
+Type `%sbd` to get sbd price from coinmarketcap
 
-* Type `.steem` to get steem price from coinmarketcap
+Type `%steem` to get steem price from coinmarketcap
 
-* Type `.sbd` to get sbd price from coinmarketcap
+Type `%s/sbd` to get steem to sbd ratio from coinmarketcap
 
-* Type `.tag <tag_name>` to get details on votes, comments, topics and pending payout of that certain tags in past 7 days
+Type `%convert <value> <from this coin/currency> <to this coin/currency>` to calculate crypto to fiat from coinmarketcap (e.g. %convert 10 steem myr)
 
-* Type `.info` to know more about this bot
+Type `%info` to know more about this bot
 
 # Developer Part
 

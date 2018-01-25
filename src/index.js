@@ -11,7 +11,8 @@ dotenv.config();
 
 import { executeQuery } from './db';
 import { searchTag } from './sql';
-import { getDateTimeFromTimestamp, getRatio, getSteem, getSBD } from './util';
+import { getDateTimeFromTimestamp } from './util';
+import { getPrice, getOnlyPrice, countRatio } from './api';
 
 import config from './config.json';
 
@@ -62,50 +63,14 @@ client.on('message', msg => {
                     msg.reply(`\n
 BEEP BEEP 🤖, statBot HELP\n
 Type \`${config.trigger}ping\` to get bot reply 'pong'\n
-Type \`${config.trigger}user <steem_name>\` to get details of that person\n
-Type \`${config.trigger}ratio\` to get steem to sbd ratio from coinmarketcap\n
-Type \`${config.trigger}steem\` to get steem price from coinmarketcap\n
+Type \`${config.trigger}tag <tag_name>\` to get details on votes, comments, topics and pending payout of that certain tags in past 7 days\n
+Type \`${config.trigger}coin <coin_name> <currency(optional)>\` to get price of the coin (e.g. \`${config.trigger}coin bitcoin myr\`)\n
 Type \`${config.trigger}sbd\` to get sbd price from coinmarketcap\n
-Type \`${
-                        config.trigger
-                    }tag <tag_name>\` to get details on votes, comments, topics and pending payout of that certain tags in past 7 days\n
+Type \`${config.trigger}steem\` to get steem price from coinmarketcap\n
+Type \`${config.trigger}s/sbd\` to get steem to sbd ratio from coinmarketcap\n
+Type \`${config.trigger}convert <value> <coin_name> <currency>\` to get steem to sbd ratio from coinmarketcap (e.g. \`${config.trigger}convert 10 steem myr\`)\n
 Type \`${config.trigger}info\` to know more about this bot
                 `);
-                    break;
-                case 'user':
-                    steem.api.getAccounts(args, function(err, results) {
-                        if (!!results[0]) {
-                            results.map(result => {
-                                if (!!result) {
-                                    console.log(result);
-                                    let reputation = steem.formatter.reputation(
-                                        result.reputation
-                                    );
-                                    let accountWorth = steem.formatter.estimateAccountValue(
-                                        result
-                                    );
-
-                                    accountWorth
-                                        .then(worth => {
-                                            msg.reply(`@${result.name} says "${
-                                                JSON.parse(result.json_metadata)
-                                                    .profile.about
-                                            }"
-                                and reputation: ${reputation} 🔰
-                                and account worth: $${worth} 💰
-                                `);
-                                        })
-                                        .catch(err => {
-                                            console.log(err);
-                                        });
-                                } else {
-                                    msg.reply('User not found');
-                                }
-                            });
-                        } else {
-                            msg.reply('User not found');
-                        }
-                    });
                     break;
                 case 'ping':
                     msg.reply('Pong!');
@@ -118,31 +83,78 @@ Type \`${config.trigger}info\` to know more about this bot
                         console.log(result);
                         result === 'ERROR'
                             ? msg.reply('ERROR ON QUERY-ING')
-                            : msg.reply(
-                                  `There is
-                               ${result[0].Posts} posts 📘,
-                               ${result[0].Votes} votes 👍,
-                               $${result[0].PendingPayouts} steem 💵,
-                               ${result[0].Comments} comments 💬,
-                               on #${tag} in the past 7 days`
-                              );
+                            : msg.reply(`There is
+${result[0].Posts} posts 📘,
+${result[0].Votes} votes 👍,
+$${result[0].PendingPayouts} steem 💵,
+${result[0].Comments} comments 💬,
+Profitability 💰: ${result[0].PendingPayouts / result[0].Posts}
+on #${tag} in the past 7 days`);
                     }
                     querying(query, args);
                     break;
+                case 'coin':
+                    if (args.length > 0 && args.length < 3) {
+                        const coin = args[0];
+                        const currency = args[1] || 'USD';
+                        getPrice(coin, currency)
+                            .then(data => {
+                                msg.reply(`1 ${coin} is worth ${data}`);
+                            })
+                            .catch(err => msg.reply('Wrong Coin'));
+                    } else {
+                        msg.reply(
+                            `Please follow the format: "${
+                                config.trigger
+                            }coin <CryptoCurrencyName> <CurrencyName>" (e.g. ${
+                                config.trigger
+                            }coin ethereum MYR)`
+                        );
+                    }
+                    break;
                 case 'sbd':
-                    getSBD().then(data =>
-                        msg.reply(`SBD Price at ${data} USD`)
-                    );
+                    getPrice('steem-dollars', 'USD')
+                        .then(data => {
+                            msg.reply(`SBD Price is at ${data}`);
+                        })
+                        .catch(err => msg.reply('Server down'));
                     break;
                 case 'steem':
-                    getSteem().then(data =>
-                        msg.reply(`Steem Price at ${data} USD`)
-                    );
+                    getPrice('steem', 'USD')
+                        .then(data => {
+                            msg.reply(`Steem Price is at ${data}`);
+                        })
+                        .catch(err => msg.reply('Server down'));
                     break;
-                case 'ratio':
-                    getRatio().then(data =>
-                        msg.reply(`steem/sbd ratio: ${data}`)
-                    );
+                case 's/sbd':
+                    countRatio('steem', 'steem-dollars')
+                        .then(data => {
+                            msg.reply(`Steem to SBD ratio is ${data}`);
+                        })
+                        .catch(err => bot.sendMessage(chatId, 'Invalid Coin'));
+                    break;
+                case 'convert':
+                    if (args.length === 3 && !!parseInt(args[0])) {
+                        const number = parseFloat(args[0]);
+                        const coin = args[1];
+                        const currency = args[2];
+                        getOnlyPrice(coin, currency)
+                            .then(data => {
+                                console.log(data, number)
+                                msg.reply(`${number} ${coin} is worth ${currency} ${parseFloat(data)*number}`);
+                            })
+                            .catch(err => msg.reply('Wrong Coin'));
+                    } else {
+                        msg.reply(
+                            `Please follow the format: "${
+                                config.trigger
+                            }coin <CryptoCurrencyName> <CurrencyName>" (e.g. ${
+                                config.trigger
+                            }coin ethereum MYR)`
+                        );
+                    }
+                    break;
+
                     break;
                 default:
                     msg.reply(`\`${config.trigger}help\` to get started`);

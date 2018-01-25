@@ -1,5 +1,5 @@
 {
-  "trigger": ".",
+  "trigger": "%",
   "botId": "396821745840947211",
   "timeAllowed": "30"
 }

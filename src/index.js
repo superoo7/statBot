@@ -64,11 +64,10 @@ client.on('message', msg => {
 BEEP BEEP 🤖, statBot HELP\n
 Type \`${config.trigger}ping\` to get bot reply 'pong'\n
 Type \`${config.trigger}tag <tag_name>\` to get details on votes, comments, topics and pending payout of that certain tags in past 7 days\n
-Type \`${config.trigger}coin <coin_name> <currency(optional)>\` to get price of the coin (e.g. \`${config.trigger}coin bitcoin myr\`)\n
 Type \`${config.trigger}sbd\` to get sbd price from coinmarketcap\n
 Type \`${config.trigger}steem\` to get steem price from coinmarketcap\n
 Type \`${config.trigger}s/sbd\` to get steem to sbd ratio from coinmarketcap\n
-Type \`${config.trigger}convert <value> <coin_name> <currency>\` to calculate crypto to fiat from coinmarketcap (e.g. \`${config.trigger}convert 10 steem myr\`)\n
+Type \`${config.trigger}convert <value> <from this coin/currency> <to this coin/currency>\` to calculate crypto to fiat from coinmarketcap (e.g. \`${config.trigger}convert 10 steem myr\`)\n
 Type \`${config.trigger}info\` to know more about this bot
                 `);
                     break;
@@ -93,25 +92,6 @@ on #${tag} in the past 7 days`);
                     }
                     querying(query, args);
                     break;
-                case 'coin':
-                    if (args.length > 0 && args.length < 3) {
-                        const coin = args[0];
-                        const currency = args[1] || 'USD';
-                        getPrice(coin, currency)
-                            .then(data => {
-                                msg.reply(`1 ${coin} is worth ${data}`);
-                            })
-                            .catch(err => msg.reply('Wrong Coin'));
-                    } else {
-                        msg.reply(
-                            `Please follow the format: "${
-                                config.trigger
-                            }coin <CryptoCurrencyName> <CurrencyName>" (e.g. ${
-                                config.trigger
-                            }coin ethereum MYR)`
-                        );
-                    }
-                    break;
                 case 'sbd':
                     getPrice('steem-dollars', 'USD')
                         .then(data => {
@@ -127,30 +107,33 @@ on #${tag} in the past 7 days`);
                         .catch(err => msg.reply('Server down'));
                     break;
                 case 's/sbd':
-                    countRatio('steem', 'steem-dollars')
+                    countRatio('steem', 'sbd')
                         .then(data => {
                             msg.reply(`Steem to SBD ratio is ${data}`);
                         })
-                        .catch(err => bot.sendMessage(chatId, 'Invalid Coin'));
+                        .catch(err => msg.reply('Invalid Coin'));
                     break;
                 case 'convert':
                     if (args.length === 3 && !!parseInt(args[0])) {
                         const number = parseFloat(args[0]);
-                        const coin = args[1];
-                        const currency = args[2];
-                        getOnlyPrice(coin, currency)
+                        const coin1 = args[1];
+                        const coin2 = args[2];
+                        getOnlyPrice(coin1, coin2)
                             .then(data => {
-                                console.log(data, number)
-                                msg.reply(`${number} ${coin} is worth ${currency} ${parseFloat(data)*number}`);
+                                if (data === '-') {
+                                    msg.reply('Invalid coin/currency')
+                                } else {
+                                    msg.reply(`${number} ${coin1} =  ${parseFloat(data)*number} ${coin2}`);
+                                }
                             })
                             .catch(err => msg.reply('Wrong Coin'));
                     } else {
                         msg.reply(
                             `Please follow the format: "${
                                 config.trigger
-                            }coin <CryptoCurrencyName> <CurrencyName>" (e.g. ${
+                            }convert <number> <CryptoCurrencyName> <CurrencyName>" (e.g. ${
                                 config.trigger
-                            }coin ethereum MYR)`
+                            }convert 1 eth myr)`
                         );
                     }
                     break;

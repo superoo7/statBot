@@ -68,7 +68,7 @@ Type \`${config.trigger}coin <coin_name> <currency(optional)>\` to get price of 
 Type \`${config.trigger}sbd\` to get sbd price from coinmarketcap\n
 Type \`${config.trigger}steem\` to get steem price from coinmarketcap\n
 Type \`${config.trigger}s/sbd\` to get steem to sbd ratio from coinmarketcap\n
-Type \`${config.trigger}convert <value> <coin_name> <currency>\` to get steem to sbd ratio from coinmarketcap (e.g. \`${config.trigger}convert 10 steem myr\`)\n
+Type \`${config.trigger}convert <value> <coin_name> <currency>\` to calculate crypto to fiat from coinmarketcap (e.g. \`${config.trigger}convert 10 steem myr\`)\n
 Type \`${config.trigger}info\` to know more about this bot
                 `);
                     break;

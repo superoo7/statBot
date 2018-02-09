@@ -14,6 +14,7 @@ import { searchTag } from './sql';
 import { getDateTimeFromTimestamp } from './util';
 import { getPrice, getOnlyPrice, countRatio } from './api';
 
+import crypto from './crypto.json';
 import config from './config.json';
 
 // start client
@@ -116,17 +117,49 @@ on #${tag} in the past 7 days`);
                 case 'convert':
                     if (args.length === 3 && !!parseInt(args[0])) {
                         const number = parseFloat(args[0]);
-                        const coin1 = args[1];
-                        const coin2 = args[2];
-                        getOnlyPrice(coin1, coin2)
-                            .then(data => {
-                                if (data === '-') {
-                                    msg.reply('Invalid coin/currency')
-                                } else {
-                                    msg.reply(`${number} ${coin1} =  ${parseFloat(data)*number} ${coin2}`);
-                                }
-                            })
+                        const coin1 = args[1].toLowerCase();
+                        const coin2 = args[2].toLowerCase();
+                        const isCoin1Crypto = coin1 in crypto;
+                        const isCoin2Crypto = coin2 in crypto;
+                        console.log(`${isCoin1Crypto} ${isCoin2Crypto}`)
+                        if (isCoin1Crypto && isCoin2Crypto) {
+                        // Crypto to Crypto
+                            countRatio(coin1, coin2)
+                                .then(data => {
+                                    if (data === '-') {
+                                        msg.reply('Invalid coin/currency')
+                                    } else {
+                                        msg.reply(`${number} ${coin1} =  ${parseFloat(data)*number} ${coin2}`);
+                                    }
+                                })
+
+                        } else if (isCoin1Crypto) {
+                        // Crypto to Fiat
+                        // crypto, currency
+                            getOnlyPrice(coin1, coin2)
+                                .then(data => {
+                                    if (data === '-') {
+                                        msg.reply('Invalid coin/currency')
+                                    } else {
+                                        msg.reply(`${number} ${coin1} =  ${parseFloat(data)*number} ${coin2}`);
+                                    }
+                                })
                             .catch(err => msg.reply('Wrong Coin'));
+                        } else if (isCoin2Crypto) {
+                        // Fiat to Crypto
+                            getOnlyPrice(coin2, coin1)
+                                .then(data => {
+                                    if (data === '-') {
+                                        msg.reply('Invalid coin/currency')
+                                    } else {
+                                        msg.reply(`${number} ${coin1} =  ${number/parseFloat(data)} ${coin2}`);
+                                    }
+                                })
+                            .catch(err => msg.reply('Wrong Coin'));
+                        } else {
+                        // error
+                            msg.reply('Invalid coin/currency')
+                        }
                     } else {
                         msg.reply(
                             `Please follow the format: "${
@@ -136,8 +169,6 @@ on #${tag} in the past 7 days`);
                             }convert 1 eth myr)`
                         );
                     }
-                    break;
-
                     break;
                 default:
                     msg.reply(`\`${config.trigger}help\` to get started`);

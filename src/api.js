@@ -1,4 +1,5 @@
 import axios from 'axios';
+import crypto from './crypto.json';
 
 let getPrice = async (coin, currency = 'USD') => {
   let res = await axios.get(
@@ -9,11 +10,11 @@ let getPrice = async (coin, currency = 'USD') => {
   return `${currency} ${price}`;
 };
 
-let getOnlyPrice = async (coin1, coin2) => {
+let getOnlyPrice = async (coin, currency) => {
   let res = await axios.get(
-    `https://min-api.cryptocompare.com/data/price?fsym=${coin1.toUpperCase()}&tsyms=${coin2.toUpperCase()}`
+    `https://api.coinmarketcap.com/v1/ticker/${crypto[coin]}/?convert=${currency}`
   ).catch((err) => 'Wrong Coin');
-  let price = res.data[coin2.toUpperCase()] || '-';
+  let price = res.data[0][`price_${currency.toLowerCase()}`] || '-';
   return price;
 };
 
@@ -28,7 +29,7 @@ let countRatio = async (coin1, coin2) => {
       coinPrice2 = price2;
     })
     .then(() => {
-      return `${coinPrice1 / coinPrice2} ${coin1}/${coin2}`;
+      return coinPrice1/coinPrice2;
     });
 };
 

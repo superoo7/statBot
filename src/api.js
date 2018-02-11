@@ -6,7 +6,6 @@ let getPrice = async (coin, currency = 'USD') => {
     `https://api.coinmarketcap.com/v1/ticker/${coin}/?convert=${currency}`
   );
   let price = res.data[0][`price_${currency.toLowerCase()}`] || '-';
-  console.log(price);
   return `${currency} ${price}`;
 };
 

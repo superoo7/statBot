@@ -1,6 +1,6 @@
 import * as Discord from 'discord.js';
 import * as logger from 'winston';
-import * as dotenv from 'dotenv';
+import dotenv from 'dotenv';
 import * as steem from 'steem';
 import * as http from 'http';
 import axios from 'axios';

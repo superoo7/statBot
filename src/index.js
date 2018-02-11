@@ -68,6 +68,7 @@ Type \`${config.trigger}tag <tag_name>\` to get details on votes, comments, topi
 Type \`${config.trigger}sbd\` to get sbd price from coinmarketcap\n
 Type \`${config.trigger}steem\` to get steem price from coinmarketcap\n
 Type \`${config.trigger}s/sbd\` to get steem to sbd ratio from coinmarketcap\n
+Type \`${config.trigger}sbd/s\` to get sbd to steem ratio from coinmarketcap\n
 Type \`${config.trigger}convert <value> <from this coin/currency> <to this coin/currency>\` to calculate crypto to fiat from coinmarketcap (e.g. \`${config.trigger}convert 10 steem myr\`)\n
 Type \`${config.trigger}info\` to know more about this bot
                 `);
@@ -111,6 +112,13 @@ on #${tag} in the past 7 days`);
                     countRatio('steem', 'sbd')
                         .then(data => {
                             msg.reply(`Steem to SBD ratio is ${data}`);
+                        })
+                        .catch(err => msg.reply('Invalid Coin'));
+                    break;
+                case 'sbd/s':
+                    countRatio('sbd', 'steem')
+                        .then(data => {
+                            msg.reply(`SBD to Steem ratio is ${data}`);
                         })
                         .catch(err => msg.reply('Invalid Coin'));
                     break;

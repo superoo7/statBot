@@ -8,8 +8,8 @@ from
  Comments (NOLOCK)
 where
  dirty = 'False' and
- json_metadata LIKE('%"${tag}"%') and
-  parent_author = '' and
+ CONTAINS(json_metdata, ‘${tag}’) and
+ parent_author = '' and
  datediff(day, created, GETDATE()) between 0 and 7
 order by
  Votes desc

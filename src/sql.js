@@ -8,7 +8,7 @@ from
  Comments (NOLOCK)
 where
  dirty = 'False' and
- CONTAINS(json_metdata, ‘${tag}’) and
+ CONTAINS(json_metadata, '${tag}') and
  parent_author = '' and
  datediff(day, created, GETDATE()) between 0 and 7
 order by

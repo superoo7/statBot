@@ -211,10 +211,20 @@ Type \`${config.trigger}info\` to know more about this bot
                 case 'steem':
                     getPrice('steem', 'USD')
                         .then(data => {
-                            msg.reply(
-                                `Steem Price is at ${data}`
-                            );
-                        })
+                            msg.channel.send({embed: {
+                                color: 3447003,
+                                author: {
+                                    name: currentUsername,
+                                    icon_url: msg.author.avatarURL
+                                  },
+                                description: "Pong!",
+                                timestamp: new Date(),
+                                footer: {
+                                  icon_url: client.user.avatarURL,
+                                  text: "© superoo7"
+                                }
+                              }});
+                            })
                         .catch(err =>
                             msg.reply('Server down')
                         );
@@ -268,12 +278,30 @@ Type \`${config.trigger}info\` to know more about this bot
                                             'Invalid coin/currency'
                                         );
                                     } else {
-                                        msg.reply(
-                                            `${number} ${coin1} =  ${parseFloat(
-                                                data
-                                            ) *
-                                                number} ${coin2}`
-                                        );
+                                        msg.channel.send({embed: {
+                                            color: 3447003,
+                                            author: {
+                                                name: currentUsername,
+                                                icon_url: msg.author.avatarURL
+                                              },
+                                            description: `${coin1} -> ${coin2}`,
+                                            fields: [
+                                                {
+                                                    name: `${coin1}`,
+                                                    value: `${number}`,
+                                                },
+                                                {
+                                                    name: `${coin2}`,
+                                                    value: `${parseFloat(data) * number }`
+                                                }
+                                            ],
+                                            timestamp: new Date(),
+                                            footer: {
+                                              icon_url: client.user.avatarURL,
+                                              text: "© superoo7"
+                                            }
+                                          }});
+                                        
                                     }
                                 }
                             );
@@ -287,12 +315,30 @@ Type \`${config.trigger}info\` to know more about this bot
                                             'Invalid coin/currency'
                                         );
                                     } else {
-                                        msg.reply(
-                                            `${number} ${coin1} =  ${parseFloat(
-                                                data
-                                            ) *
-                                                number} ${coin2}`
-                                        );
+                                        msg.channel.send({embed: {
+                                            color: 3447003,
+                                            author: {
+                                                name: currentUsername,
+                                                icon_url: msg.author.avatarURL
+                                              },
+                                            description: `${coin1} -> ${coin2}`,
+                                            fields: [
+                                                {
+                                                    name: `${coin1}`,
+                                                    value: `${number}`,
+                                                },
+                                                {
+                                                    name: `${coin2}`,
+                                                    value: `${parseFloat(data) * number }`
+                                                }
+                                            ],
+                                            timestamp: new Date(),
+                                            footer: {
+                                              icon_url: client.user.avatarURL,
+                                              text: "© superoo7"
+                                            }
+                                          }});
+                                    
                                     }
                                 })
                                 .catch(err =>
@@ -307,12 +353,29 @@ Type \`${config.trigger}info\` to know more about this bot
                                             'Invalid coin/currency'
                                         );
                                     } else {
-                                        msg.reply(
-                                            `${number} ${coin1} =  ${number /
-                                                parseFloat(
-                                                    data
-                                                )} ${coin2}`
-                                        );
+                                        msg.channel.send({embed: {
+                                            color: 3447003,
+                                            author: {
+                                                name: currentUsername,
+                                                icon_url: msg.author.avatarURL
+                                              },
+                                            description: `${coin1} -> ${coin2}`,
+                                            fields: [
+                                                {
+                                                    name: `${coin1}`,
+                                                    value: `${number}`,
+                                                },
+                                                {
+                                                    name: `${coin2}`,
+                                                    value: `${number / parseFloat(data)}`
+                                                }
+                                            ],
+                                            timestamp: new Date(),
+                                            footer: {
+                                              icon_url: client.user.avatarURL,
+                                              text: "© superoo7"
+                                            }
+                                          }});
                                     }
                                 })
                                 .catch(err =>

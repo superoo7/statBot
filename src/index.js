@@ -87,7 +87,11 @@ client.on('message', msg => {
                             }, 
                             {
                                 name: "dogecoin 🐶",
-                                value: "D8H6ffXcLGZHZyhSmZS3BwE3beWLeiMWi7"
+                                value: "DQzS5W8hPy2d9pw3AgM8sVed31vap8PzUe"
+                            },
+                            {
+                                name: "Ethereum",
+                                value: "0x2bd5e79a753ebdf8cb83aaf4d417aa549625a192"
                             }
                         ],
                         timestamp: new Date(),
@@ -157,9 +161,7 @@ Type \`${config.trigger}info\` to know more about this bot
                         );
                         console.log(result);
                         result === 'ERROR'
-                            ? msg.reply(
-                                  'ERROR ON QUERY-ING'
-                              )
+                            ? errorMsg(msg,'ERROR ON QUERY-ING')
                             : msg.channel.send({embed: {
                                 color: 3447003,
                                 author: {
@@ -205,7 +207,7 @@ Type \`${config.trigger}info\` to know more about this bot
                             );
                         })
                         .catch(err =>
-                            msg.reply('Server down')
+                            errorMsg(msg,'Server down')
                         );
                     break;
                 case 'steem':
@@ -226,7 +228,7 @@ Type \`${config.trigger}info\` to know more about this bot
                               }});
                             })
                         .catch(err =>
-                            msg.reply('Server down')
+                            errorMsg(msg,'Server down')
                         );
                     break;
                 case 's/sbd':
@@ -237,7 +239,7 @@ Type \`${config.trigger}info\` to know more about this bot
                             );
                         })
                         .catch(err =>
-                            msg.reply('Invalid Coin')
+                            errorMsg(msg,'Invalid Coin')
                         );
                     break;
                 case 'sbd/s':
@@ -248,7 +250,7 @@ Type \`${config.trigger}info\` to know more about this bot
                             );
                         })
                         .catch(err =>
-                            msg.reply('Invalid Coin')
+                            errorMsg(msg,'Invalid Coin')
                         );
                     break;
                 case 'convert':
@@ -274,9 +276,7 @@ Type \`${config.trigger}info\` to know more about this bot
                             countRatio(coin1, coin2).then(
                                 data => {
                                     if (data === '-') {
-                                        msg.reply(
-                                            'Invalid coin/currency'
-                                        );
+                                        errorMsg(msg,'Invalid coin/currency');
                                     } else {
                                         msg.channel.send({embed: {
                                             color: 3447003,
@@ -311,9 +311,7 @@ Type \`${config.trigger}info\` to know more about this bot
                             getOnlyPrice(coin1, coin2)
                                 .then(data => {
                                     if (data === '-') {
-                                        msg.reply(
-                                            'Invalid coin/currency'
-                                        );
+                                        errorMsg(msg,'Invalid coin/currency');
                                     } else {
                                         msg.channel.send({embed: {
                                             color: 3447003,
@@ -342,7 +340,7 @@ Type \`${config.trigger}info\` to know more about this bot
                                     }
                                 })
                                 .catch(err =>
-                                    msg.reply('Wrong Coin')
+                                    errorMsg(msg,'Wrong Coin')
                                 );
                         } else if (isCoin2Crypto) {
                             // Fiat to Crypto
@@ -379,21 +377,15 @@ Type \`${config.trigger}info\` to know more about this bot
                                     }
                                 })
                                 .catch(err =>
-                                    msg.reply('Wrong Coin')
+                                    errorMsg(msg, 'Wrong Coin')
                                 );
                         } else {
                             // error
-                            msg.reply(
-                                'Invalid coin/currency'
-                            );
+                            errorMsg(msg, 'Invalid coin/currency');
                         }
                     } else {
-                        msg.reply(
-                            `Please follow the format: "${
-                                config.trigger
-                            }convert <number> <CryptoCurrencyName> <CurrencyName>" (e.g. ${
-                                config.trigger
-                            }convert 1 eth myr)`
+                        errorMsg(msg,`Please follow the format: "${config.trigger}convert <number> <CryptoCurrencyName> <CurrencyName>" (e.g. ${
+                                config.trigger}convert 1 eth myr)`
                         );
                     }
                     break;
@@ -408,4 +400,17 @@ Type \`${config.trigger}info\` to know more about this bot
         }
     }
 });
+
+function errorMsg(msg, m) {
+    msg.channel.send({embed: {
+        color: 15158332,
+        description: m,
+        timestamp: new Date(),
+        footer: {
+          icon_url: client.user.avatarURL,
+          text: "© superoo7"
+        }
+      }});
+}
+
 client.login(process.env.DISCORD_TOKEN); // http //     .createServer(function(request, response) { //         response.writeHead(200, { 'Content-Type': contentType }); //         response.end(content, 'utf-8'); //     }) //     .listen(process.env.PORT || 5000);

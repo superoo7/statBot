@@ -7,9 +7,8 @@ select
 from
  Comments (NOLOCK)
 where
- dirty = 'False' and
+ depth = 0 AND
  CONTAINS(json_metadata, '${tag}') and
- parent_author = '' and
  datediff(day, created, GETDATE()) between 0 and 7
 order by
  Votes desc

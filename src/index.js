@@ -61,9 +61,42 @@ client.on('message', msg => {
             // END
             switch (cmd) {
                 case 'info':
-                    msg.reply(
-                        'Created by @superoo7 on 2017-2018 (MIT LICENSE) https://github.com/superoo7/steem-discord'
-                    );
+                    msg.channel.send({embed: {
+                        color: 3007003,
+                        author: {
+                            name: currentUsername,
+                            icon_url: msg.author.avatarURL
+                        },
+                        description: "Created by @superoo7",
+                        fields: [
+                            {
+                                name: "License",
+                                value: "on 2017-2018 (MIT LICENSE)"
+                            },
+                            {
+                                name: "GitHub Repository",
+                                value: "https://github.com/superoo7/steem-discord"
+                            },
+                            {
+                                name: "Donation",
+                                value: "Consider donation to me for me to sustain this project in terms of server cost."
+                            },
+                            {
+                                name: "steem",
+                                value: "@superoo7"
+                            }, 
+                            {
+                                name: "dogecoin 🐶",
+                                value: "D8H6ffXcLGZHZyhSmZS3BwE3beWLeiMWi7"
+                            }
+                        ],
+                        timestamp: new Date(),
+                        footer: {
+                          icon_url: client.user.avatarURL,
+                          text: "© superoo7"
+                        }
+                    }});
+
                     break;
                 case 'help':
                     msg.reply(`\n
@@ -93,10 +126,30 @@ Type \`${config.trigger}info\` to know more about this bot
                 `);
                     break;
                 case 'ping':
-                    msg.reply('Pong!');
+                    // msg.reply('Pong!');
+                    msg.channel.send({embed: {
+                        color: 3447003,
+                        author: {
+                            name: currentUsername,
+                            icon_url: msg.author.avatarURL
+                          },
+                        description: "Pong!",
+                        timestamp: new Date(),
+                        footer: {
+                          icon_url: client.user.avatarURL,
+                          text: "© superoo7"
+                        }
+                      }});
                     break;
                 case 'tag':
-                    msg.reply('Connecting to database....');
+                    msg.channel.send({embed: {
+                        color: 3007003,
+                        author: {
+                            name: currentUsername,
+                            icon_url: msg.author.avatarURL
+                          },
+                        description: "Connecting to database",
+                    }});
                     const query = searchTag(args[0]);
                     async function querying(query, tag) {
                         let result = await executeQuery(
@@ -107,14 +160,40 @@ Type \`${config.trigger}info\` to know more about this bot
                             ? msg.reply(
                                   'ERROR ON QUERY-ING'
                               )
-                            : msg.reply(`There is
-${result[0].Posts} posts 📘,
-${result[0].Votes} votes 👍,
-$${result[0].PendingPayouts} steem 💵,
-${result[0].Comments} comments 💬,
-Profitability 💰: ${result[0].PendingPayouts /
-                                  result[0].Posts}
-on #${tag} in the past 7 days`);
+                            : msg.channel.send({embed: {
+                                color: 3447003,
+                                author: {
+                                    name: currentUsername,
+                                    icon_url: msg.author.avatarURL
+                                  },
+                                description: `#${tag} in the past 7 days`,
+                                fields: [{
+                                    name: "Posts 📘",
+                                    value: `${result[0].Posts}`
+                                  },
+                                  {
+                                    name: "Votes 👍",
+                                    value: `${result[0].Votes}`
+                                  },
+                                  {
+                                    name: "Pending Payout 💵",
+                                    value: `$${result[0].PendingPayouts}`
+                                  },
+                                  {
+                                      name: "Comments 💬",
+                                      value: `${result[0].Comments}`
+                                  },
+                                  {
+                                      name: "Profitability 💰",
+                                      value: `$${result[0].PendingPayouts/result[0].Posts}`
+                                  }
+                                ],
+                                timestamp: new Date(),
+                                footer: {
+                                  icon_url: client.user.avatarURL,
+                                  text: "© superoo7"
+                                }
+                              }});
                     }
                     querying(query, args);
                     break;

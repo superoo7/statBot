@@ -103,31 +103,65 @@ client.on('message', msg => {
 
                     break;
                 case 'help':
-                    msg.reply(`\n
-BEEP BEEP 🤖, statBot HELP\n
-Type \`${config.trigger}ping\` to get bot reply 'pong'\n
-Type \`${
-                        config.trigger
-                    }tag <tag_name>\` to get details on votes, comments, topics and pending payout of that certain tags in past 7 days\n
-Type \`${
-                        config.trigger
-                    }sbd\` to get sbd price from coinmarketcap\n
-Type \`${
-                        config.trigger
-                    }steem\` to get steem price from coinmarketcap\n
-Type \`${
-                        config.trigger
-                    }s/sbd\` to get steem to sbd ratio from coinmarketcap\n
-Type \`${
-                        config.trigger
-                    }sbd/s\` to get sbd to steem ratio from coinmarketcap\n
-Type \`${
-                        config.trigger
-                    }convert <value> <from this coin/currency> <to this coin/currency>\` to calculate crypto to fiat from coinmarketcap (e.g. \`${
-                        config.trigger
-                    }convert 10 steem myr\`)\n
-Type \`${config.trigger}info\` to know more about this bot
-                `);
+                msg.channel.send({embed: {
+                    color: 3007003,
+                    author: {
+                        name: currentUsername,
+                        icon_url: msg.author.avatarURL
+                    },
+                    description: "BEEP BEEP 🤖, statBot HELP (V2.0.0 alpha)",
+                    fields: [
+                        {
+                            name:  `\`${config.trigger}ping\``,
+                            value: "Bot reply 'pong'."
+                        },
+                        {
+                            name: `\`${config.trigger}tag <tag_name>\``,
+                            value: "Details on votes, comments, topics and pending payout of that certain tags in past 7 days"
+                        },
+                        {
+                            name: `\`${config.trigger}sbd\``,
+                            value: `SBD price from coinmarketcap`
+                        },
+                        {
+                            name: `\`${config.trigger}steem\` or \`${config.trigger}s\``,
+                            value: `Steem price from coinmarketcap`
+                        },
+                        {
+                            name: `\`${config.trigger}s/sbd\` or \`${config.trigger}sbd/s\``,
+                            value: `Steem to SBD ratio or SBD to Steem ratio from coinmarketcap`
+                        },
+                        {
+                            name: `\`${config.trigger}convert <value> <from this coin/currency> <to this coin/currency>\``,
+                            value: `To calculate crypto to fiat from coinmarketcap (e.g. \`${config.trigger}convert 10 steem myr\`)`
+                        },
+                        {
+                            name: `\`${config.trigger}info\``,
+                            value: `To know more about this bot`
+                        },
+                        {
+                            name: "Donation",
+                            value: "Consider donation to me for me to sustain this project in terms of server cost."
+                        },
+                        {
+                            name: "steem",
+                            value: "@superoo7"
+                        }, 
+                        {
+                            name: "dogecoin 🐶",
+                            value: "DQzS5W8hPy2d9pw3AgM8sVed31vap8PzUe"
+                        },
+                        {
+                            name: "Ethereum",
+                            value: "0x2bd5e79a753ebdf8cb83aaf4d417aa549625a192"
+                        }
+                    ],
+                    timestamp: new Date(),
+                    footer: {
+                      icon_url: client.user.avatarURL,
+                      text: "© superoo7"
+                    }
+                }});
                     break;
                 case 'ping':
                     // msg.reply('Pong!');
@@ -202,14 +236,45 @@ Type \`${config.trigger}info\` to know more about this bot
                 case 'sbd':
                     getPrice('steem-dollars', 'USD')
                         .then(data => {
-                            msg.reply(
-                                `SBD Price is at ${data}`
-                            );
+                            msg.channel.send({embed: {
+                                color: 3447003,
+                                author: {
+                                    name: currentUsername,
+                                    icon_url: msg.author.avatarURL
+                                  },
+                                description: `SBD Price is at ${data}`,
+                                timestamp: new Date(),
+                                footer: {
+                                  icon_url: client.user.avatarURL,
+                                  text: "© superoo7"
+                                }
+                              }});
                         })
                         .catch(err =>
                             errorMsg(msg,'Server down')
                         );
                     break;
+                case 's':
+                    getPrice('steem', 'USD')
+                    .then(data => {
+                        msg.channel.send({embed: {
+                            color: 3447003,
+                            author: {
+                                name: currentUsername,
+                                icon_url: msg.author.avatarURL
+                                },
+                            description: `${data}`,
+                            timestamp: new Date(),
+                            footer: {
+                                icon_url: client.user.avatarURL,
+                                text: "© superoo7"
+                            }
+                            }});
+                        })
+                    .catch(err =>
+                        errorMsg(msg,'Server down')
+                    );
+                    break;    
                 case 'steem':
                     getPrice('steem', 'USD')
                         .then(data => {
@@ -219,7 +284,7 @@ Type \`${config.trigger}info\` to know more about this bot
                                     name: currentUsername,
                                     icon_url: msg.author.avatarURL
                                   },
-                                description: "Pong!",
+                                description: `${data}`,
                                 timestamp: new Date(),
                                 footer: {
                                   icon_url: client.user.avatarURL,

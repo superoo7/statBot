@@ -1,10 +1,18 @@
 import * as Discord from 'discord.js'
+import COLOR from './color'
+
+const color = COLOR
 
 const errorMsg = (msg: Discord.Message, m: string) => {
   msg.channel.send({
     embed: {
-      color: 15158332,
+      color: color.red,
       description: m
+    },
+    timestamp: new Date(),
+    footer: {
+      icon_url: msg.author.avatarURL,
+      text: 'if you think is an error, please contact superoo7'
     }
   })
 }
@@ -12,10 +20,19 @@ const errorMsg = (msg: Discord.Message, m: string) => {
 const infoMsg = (msg: Discord.Message, m: string) => {
   msg.channel.send({
     embed: {
-      color: 15158332,
+      color: color.blue,
       description: m
     }
   })
 }
 
-export { errorMsg, infoMsg }
+const successMsg = (msg: Discord.Message, m: string) => {
+  msg.channel.send({
+    embed: {
+      color: color.green,
+      description: m
+    }
+  })
+}
+
+export { errorMsg, infoMsg, color }

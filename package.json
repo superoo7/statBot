@@ -1,10 +1,7 @@
 {
   "scripts": {
-    "dev": "NODE_ENV=development nodemon -w src --exec \"babel-node src --presets env\"",
-    "build": "babel src -s -D -d dist --presets env",
-    "test": "NODE_ENV=development nodemon -w src/test/main.test.js --exec \"babel-node src/test/main.test.js --presets env\"",
-    "start": "node dist/index.js",
-    "lint": "eslint src"
+    "dev": "concurrently \"tsc -w\" \"nodemon dist/index.js\" ",
+    "build": "tsc"
   },
   "dependencies": {
     "axios": "^0.17.1",
@@ -14,6 +11,7 @@
     "discord.js": "^11.2.1",
     "dotenv": "^4.0.0",
     "express": "^4.16.2",
+    "jest": "^22.4.3",
     "mssql": "^4.1.0",
     "steem": "^0.6.7",
     "typescript": "^2.8.3",
@@ -21,6 +19,8 @@
   },
   "devDependencies": {
     "@types/dotenv": "^4.0.3",
+    "@types/jest": "^22.2.3",
+    "@types/mssql": "^4.0.7",
     "@types/node": "^9.6.6",
     "@types/winston": "^2.3.9",
     "babel-cli": "^6.26.0",
@@ -47,7 +47,7 @@
     "node": "8.9.2"
   },
   "name": "statBot",
-  "version": "1.0.0",
-  "main": "index.js",
+  "version": "2.0.0",
+  "main": "src/index.ts",
   "license": "MIT"
 }

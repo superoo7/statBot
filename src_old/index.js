@@ -63,27 +63,23 @@ client.on('message', msg => {
                 case 'info':
                     msg.channel.send({embed: {
                         color: 3007003,
-                        author: {
-                            name: currentUsername,
-                            icon_url: msg.author.avatarURL
-                        },
                         description: "Created by @superoo7",
                         fields: [
                             {
                                 name: "License",
-                                value: "on 2017-2018 (MIT LICENSE)"
+                                value: "on 2017-2018 (MIT LICENSE)<hr>"
                             },
                             {
                                 name: "GitHub Repository",
-                                value: "https://github.com/superoo7/steem-discord"
+                                value: "https://github.com/superoo7/steem-discord \n"
                             },
                             {
                                 name: "Donation",
-                                value: "Consider donation to me for me to sustain this project in terms of server cost."
+                                value: "Consider donation to me for me to sustain this project in terms of server cost. \n"
                             },
                             {
                                 name: "steem",
-                                value: "@superoo7"
+                                value: "@superoo7 \n"
                             }, 
                             {
                                 name: "dogecoin 🐶",
@@ -105,38 +101,34 @@ client.on('message', msg => {
                 case 'help':
                 msg.channel.send({embed: {
                     color: 3007003,
-                    author: {
-                        name: currentUsername,
-                        icon_url: msg.author.avatarURL
-                    },
                     description: "BEEP BEEP 🤖, statBot HELP (V2.0.0 alpha)",
                     fields: [
                         {
-                            name:  `\`${config.trigger}ping\``,
+                            name:  `**\`${config.trigger}ping\`**`,
                             value: "Bot reply 'pong'."
                         },
                         {
-                            name: `\`${config.trigger}tag <tag_name>\``,
+                            name: `**\`${config.trigger}tag <tag_name>\`**`,
                             value: "Details on votes, comments, topics and pending payout of that certain tags in past 7 days"
                         },
                         {
-                            name: `\`${config.trigger}sbd\``,
+                            name: `**\`${config.trigger}sbd\`**`,
                             value: `SBD price from coinmarketcap`
                         },
                         {
-                            name: `\`${config.trigger}steem\` or \`${config.trigger}s\``,
+                            name: `**\`${config.trigger}steem\` or \`${config.trigger}s\`**`,
                             value: `Steem price from coinmarketcap`
                         },
                         {
-                            name: `\`${config.trigger}s/sbd\` or \`${config.trigger}sbd/s\``,
+                            name: `**\`${config.trigger}s/sbd\` or \`${config.trigger}sbd/s\`**`,
                             value: `Steem to SBD ratio or SBD to Steem ratio from coinmarketcap`
                         },
                         {
-                            name: `\`${config.trigger}convert <value> <from this coin/currency> <to this coin/currency>\``,
+                            name: `**\`${config.trigger}convert <value> <from this coin/currency> <to this coin/currency>\`**`,
                             value: `To calculate crypto to fiat from coinmarketcap (e.g. \`${config.trigger}convert 10 steem myr\`)`
                         },
                         {
-                            name: `\`${config.trigger}info\``,
+                            name: `**\`${config.trigger}info\`**`,
                             value: `To know more about this bot`
                         },
                         {
@@ -167,10 +159,6 @@ client.on('message', msg => {
                     // msg.reply('Pong!');
                     msg.channel.send({embed: {
                         color: 3447003,
-                        author: {
-                            name: currentUsername,
-                            icon_url: msg.author.avatarURL
-                          },
                         description: "Pong!",
                         timestamp: new Date(),
                         footer: {
@@ -182,10 +170,6 @@ client.on('message', msg => {
                 case 'tag':
                     msg.channel.send({embed: {
                         color: 3007003,
-                        author: {
-                            name: currentUsername,
-                            icon_url: msg.author.avatarURL
-                          },
                         description: "Connecting to database",
                     }});
                     const query = searchTag(args[0]);
@@ -198,10 +182,6 @@ client.on('message', msg => {
                             ? errorMsg(msg,'ERROR ON QUERY-ING')
                             : msg.channel.send({embed: {
                                 color: 3447003,
-                                author: {
-                                    name: currentUsername,
-                                    icon_url: msg.author.avatarURL
-                                  },
                                 description: `#${tag} in the past 7 days`,
                                 fields: [{
                                     name: "Posts 📘",
@@ -238,10 +218,6 @@ client.on('message', msg => {
                         .then(data => {
                             msg.channel.send({embed: {
                                 color: 3447003,
-                                author: {
-                                    name: currentUsername,
-                                    icon_url: msg.author.avatarURL
-                                  },
                                 description: `SBD Price is at ${data}`,
                                 timestamp: new Date(),
                                 footer: {
@@ -259,10 +235,6 @@ client.on('message', msg => {
                     .then(data => {
                         msg.channel.send({embed: {
                             color: 3447003,
-                            author: {
-                                name: currentUsername,
-                                icon_url: msg.author.avatarURL
-                                },
                             description: `${data}`,
                             timestamp: new Date(),
                             footer: {
@@ -280,10 +252,6 @@ client.on('message', msg => {
                         .then(data => {
                             msg.channel.send({embed: {
                                 color: 3447003,
-                                author: {
-                                    name: currentUsername,
-                                    icon_url: msg.author.avatarURL
-                                  },
                                 description: `${data}`,
                                 timestamp: new Date(),
                                 footer: {
@@ -299,9 +267,15 @@ client.on('message', msg => {
                 case 's/sbd':
                     countRatio('steem', 'sbd')
                         .then(data => {
-                            msg.reply(
-                                `Steem to SBD ratio is ${data}`
-                            );
+                            msg.channel.send({embed: {
+                                color: 3447003,
+                                description: `Steem to SBD ratio is \`${data}\``,
+                                timestamp: new Date(),
+                                footer: {
+                                  icon_url: client.user.avatarURL,
+                                  text: "© superoo7"
+                                }
+                              }});
                         })
                         .catch(err =>
                             errorMsg(msg,'Invalid Coin')
@@ -310,9 +284,15 @@ client.on('message', msg => {
                 case 'sbd/s':
                     countRatio('sbd', 'steem')
                         .then(data => {
-                            msg.reply(
-                                `SBD to Steem ratio is ${data}`
-                            );
+                            msg.channel.send({embed: {
+                                color: 3447003,
+                                description: `SBD to Steem ratio is \`${data}\``,
+                                timestamp: new Date(),
+                                footer: {
+                                  icon_url: client.user.avatarURL,
+                                  text: "© superoo7"
+                                }
+                              }});
                         })
                         .catch(err =>
                             errorMsg(msg,'Invalid Coin')
@@ -345,10 +325,6 @@ client.on('message', msg => {
                                     } else {
                                         msg.channel.send({embed: {
                                             color: 3447003,
-                                            author: {
-                                                name: currentUsername,
-                                                icon_url: msg.author.avatarURL
-                                              },
                                             description: `${coin1} -> ${coin2}`,
                                             fields: [
                                                 {
@@ -380,10 +356,6 @@ client.on('message', msg => {
                                     } else {
                                         msg.channel.send({embed: {
                                             color: 3447003,
-                                            author: {
-                                                name: currentUsername,
-                                                icon_url: msg.author.avatarURL
-                                              },
                                             description: `${coin1} -> ${coin2}`,
                                             fields: [
                                                 {
@@ -418,10 +390,6 @@ client.on('message', msg => {
                                     } else {
                                         msg.channel.send({embed: {
                                             color: 3447003,
-                                            author: {
-                                                name: currentUsername,
-                                                icon_url: msg.author.avatarURL
-                                              },
                                             description: `${coin1} -> ${coin2}`,
                                             fields: [
                                                 {

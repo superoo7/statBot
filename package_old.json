@@ -7,9 +7,9 @@
     "lint": "eslint src"
   },
   "dependencies": {
+    "@types/node": "^9.6.6",
     "axios": "^0.17.1",
     "babel-polyfill": "^6.26.0",
-    "concurrently": "^3.5.1",
     "discord.io": "^2.5.3",
     "discord.js": "^11.2.1",
     "dotenv": "^4.0.0",
@@ -20,9 +20,6 @@
     "winston": "^2.4.0"
   },
   "devDependencies": {
-    "@types/dotenv": "^4.0.3",
-    "@types/node": "^9.6.6",
-    "@types/winston": "^2.3.9",
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",
     "babel-eslint": "^8.1.2",

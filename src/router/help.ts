@@ -38,6 +38,10 @@ const help = async (client: Discord.Client, msg: Discord.Message) => {
           value: `To calculate crypto to fiat from coinmarketcap (e.g. **${TRIGGER}convert 10 steem myr**)`
         },
         {
+          name: `**${TRIGGER}delegate <to> <SP>** or **${TRIGGER}delegate <from> <to> <SP>**`,
+          value: `To generate link on steemconnect to delegate to someone with a specific SP`
+        },
+        {
           name: `**${TRIGGER}info**`,
           value: `To know more about this bot`
         },

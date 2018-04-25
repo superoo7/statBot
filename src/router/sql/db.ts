@@ -17,7 +17,7 @@ const executeQuery = function(query: string) {
     })
     .then(result => {
       const rows = result.recordset
-      console.log(rows)
+      // console.log(rows)
       // @ts-ignore
       mssql.close()
       return rows

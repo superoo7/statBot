@@ -10,6 +10,7 @@
     "discord.io": "^2.5.3",
     "discord.js": "^11.2.1",
     "dotenv": "^4.0.0",
+    "dsteem": "^0.8.7",
     "express": "^4.16.2",
     "jest": "^22.4.3",
     "mssql": "^4.1.0",

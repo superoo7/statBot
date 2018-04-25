@@ -7,6 +7,7 @@ import sql from './query'
 import price from './price'
 import { countRatio } from './coin'
 import convert from './convert'
+import delegate from './delegate'
 
 let router = async (client: Discord.Client, msg: Discord.Message) => {
   // All the data
@@ -32,6 +33,9 @@ let router = async (client: Discord.Client, msg: Discord.Message) => {
       break
     case 'all':
       sql(client, msg, cmd, args)
+      break
+    case 'delegate':
+      delegate(client, msg, args)
       break
     case 'query':
       if (args.length < 1) {

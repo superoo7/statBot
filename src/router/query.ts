@@ -3,7 +3,7 @@ import { errorMsg, infoMsg, color } from '../template'
 import { TRIGGER } from '../config'
 import executeQuery from './sql/db'
 import { searchTag } from './sql/queries'
-import { tag, all } from './sql'
+import { tag, all, delegator } from './sql'
 
 const sql = async (client: Discord.Client, msg: Discord.Message, cmd: string, args: string[]) => {
   switch (cmd) {
@@ -23,6 +23,14 @@ const sql = async (client: Discord.Client, msg: Discord.Message, cmd: string, ar
         errorMsg(msg, `Invalid Command, try **${TRIGGER}${cmd} steemit**`)
       }
       break
+    // case 'delegator':
+    //   if (args.length === 1) {
+    //     infoMsg(msg, `Connecting to Database by checking **${args[0]}**'s delegator`)
+    //     await delegator(client, msg, args[0])
+    //   } else {
+    //     errorMsg(msg, `Invalid Command, try **${TRIGGER}${cmd} superoo7** (without @)`)
+    //   }
+    //   break
     case 'help':
       await msg.channel.send({
         embed: {

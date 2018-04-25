@@ -30,4 +30,22 @@ order by
  Votes desc
   `
 
-export { searchTag, searchAllTag }
+let checkDelegator = (username: string) => `
+SELECT
+  delegator,
+  vesting_shares,
+  timestamp as delegation_date
+ FROM TxDelegateVestingShares
+ WHERE ID in (
+   SELECT
+     ID as last_delegation_id
+   FROM
+     TxDelegateVestingShares
+   WHERE
+     delegatee = '${username}'
+   )
+ORDER BY
+  vesting_shares DESC
+`
+
+export { searchTag, searchAllTag, checkDelegator }

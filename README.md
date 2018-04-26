@@ -2,18 +2,25 @@
 
 # What is this?
 
-This is a discord bot that are able to consume Steem API, search Steem Price, use of SteemDB.
+This is a discord bot that are able to consume Steem API, search Steem Price, use of SteemSQL.
 
 # To Do
+
+* Check delegators and delegatee
+* Added Test (Jest)
+
 
 ## Function
 
 * Check convertion rate between crypto to crypto, fiat to crypto and crypto to fiat.
 * Check SBD, Steeem Price and ratio of Steem/SBD.
-* Check details of a person.
-* Check the tags to get more details about it.
+* Check a tag on steemit to get the performance in the past 7 days.
+* Check a tag on steemit to get the performance in since 01/01/2017.
+* Generate links for delegation
 
 ## Command
+
+[OUTDATE, WILL BE UPDATE SOON]
 
 Type `%ping` to get bot reply 'pong'
 
@@ -31,6 +38,7 @@ Type `%info` to know more about this bot
 
 # Developer Part
 
+* Need subscription to SteemSQL (10 SBD/month)
 * Change `.env.sample` to `.env`
 * Add your own [Discord Token](https://github.com/reactiflux/discord-irc/wiki/Creating-a-discord-bot-&-getting-a-token)
 

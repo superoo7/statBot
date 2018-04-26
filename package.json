@@ -6,14 +6,13 @@
   "dependencies": {
     "axios": "^0.17.1",
     "babel-polyfill": "^6.26.0",
-    "concurrently": "^3.5.1",
     "discord.io": "^2.5.3",
     "discord.js": "^11.2.1",
     "dotenv": "^4.0.0",
     "dsteem": "^0.8.7",
     "express": "^4.16.2",
     "jest": "^22.4.3",
-    "mssql": "^4.1.0",
+    "mssql": "git+https://github.com/justinwoo/node-mssql.git#fixes",
     "steem": "^0.6.7",
     "typescript": "^2.8.3",
     "winston": "^2.4.0"
@@ -28,6 +27,7 @@
     "babel-core": "^6.26.0",
     "babel-eslint": "^8.1.2",
     "babel-preset-env": "^1.6.1",
+    "concurrently": "^3.5.1",
     "eslint": "^4.14.0",
     "nodemon": "^1.14.3"
   },

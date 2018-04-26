@@ -2,7 +2,7 @@ import * as Discord from 'discord.js'
 import executeQuery from './db'
 import { searchTag, searchAllTag, checkDelegator } from './queries'
 import { errorMsg, color } from '../../template'
-import * as steem from 'steem'
+import { steem } from '../../steem'
 
 let tag = async (client: Discord.Client, msg: Discord.Message, tag: string) => {
   let result: any = await executeQuery(searchTag(tag)).catch(() => {
@@ -109,26 +109,27 @@ let all = async (client: Discord.Client, msg: Discord.Message, tag: string) => {
 }
 
 const delegator = async (client: Discord.Client, msg: Discord.Message, username: string) => {
-  let result: any = await executeQuery(checkDelegator(username)).catch(() => {
-    errorMsg(msg, `Database Error`)
-    return
-  })
-
-  // steem.config.set('websocket', 'wss://gtg.steem.house:8090')
-  console.log(1)
-  let data = await steem.api.getDynamicGlobalPropertiesAsync().then((a: any) => a)
-  console.log(2)
-  const totalSteem = Number(data.total_vesting_fund_steem.split(' ')[0])
-  const totalVests = Number(data.total_vesting_shares.split(' ')[0])
-  let fields: { name: string; value: string; inline: boolean }[] = result.map((r: any) => {
-    return {
-      name: `${r.delegator}`,
-      value: `${r.vesting_shares} Vests\n${totalSteem * (r.vesting_share / totalVests)} SP`,
-      inline: true
-    }
-  })
-  console.log(fields)
-  await msg.channel.send({
+  let data: any[] = await Promise.all([
+    await executeQuery(checkDelegator(username)),
+    await steem.api.getDynamicGlobalPropertiesAsync()
+  ])
+  const fields: { name: string; value: string; inline: boolean }[] = data[0]
+    .filter((r: any) => {
+      return r.vesting_shares !== 0
+    })
+    .map((r: any) => {
+      const d = data[1]
+      const totalSteems = parseFloat(d.total_vesting_fund_steem.split(' ')[0])
+      const totalVests = parseFloat(d.total_vesting_shares.split(' ')[0])
+      const vestingShares = parseFloat(r.vesting_shares)
+      let sp = totalSteems * (vestingShares / totalVests)
+      return {
+        name: `${r.delegator}`,
+        value: `${r.vesting_shares} Vests\n${sp} SP`,
+        inline: true
+      }
+    })
+  msg.channel.send({
     embed: {
       color: color.green,
       description: `Delegators of ${username}`,
@@ -140,6 +141,7 @@ const delegator = async (client: Discord.Client, msg: Discord.Message, username:
       }
     }
   })
+  return
 }
 
 export { tag, all, delegator }

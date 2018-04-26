@@ -34,6 +34,9 @@ let router = async (client: Discord.Client, msg: Discord.Message) => {
     case 'all':
       sql(client, msg, cmd, args)
       break
+    case 'delegator':
+      sql(client, msg, cmd, args)
+      break
     case 'delegate':
       delegate(client, msg, args)
       break

@@ -23,14 +23,16 @@ const sql = async (client: Discord.Client, msg: Discord.Message, cmd: string, ar
         errorMsg(msg, `Invalid Command, try **${TRIGGER}${cmd} steemit**`)
       }
       break
-    // case 'delegator':
-    //   if (args.length === 1) {
-    //     infoMsg(msg, `Connecting to Database by checking **${args[0]}**'s delegator`)
-    //     await delegator(client, msg, args[0])
-    //   } else {
-    //     errorMsg(msg, `Invalid Command, try **${TRIGGER}${cmd} superoo7** (without @)`)
-    //   }
-    //   break
+    case 'delegator':
+      if (args.length === 1) {
+        infoMsg(msg, `Connecting to Database by checking **${args[0]}**'s delegator`)
+        await delegator(client, msg, args[0]).catch(() =>
+          errorMsg(msg, 'Database Error. Try again.')
+        )
+      } else {
+        errorMsg(msg, `Invalid Command, try **${TRIGGER}${cmd} superoo7** (without @)`)
+      }
+      break
     case 'help':
       await msg.channel.send({
         embed: {

@@ -113,15 +113,33 @@ const delegator = async (client: Discord.Client, msg: Discord.Message, username:
     await executeQuery(checkDelegator(username)),
     await steem.api.getDynamicGlobalPropertiesAsync()
   ])
-  const fields: { name: string; value: string; inline: boolean }[] = data[0]
-    .filter((r: any) => {
+
+  let authorList: string[] = []
+  const filtered_delegator: {
+    delegator: string
+    vesting_shares: number
+    timestamp: string
+  }[] = data[0].filter((d: { delegator: string; vesting_shares: number; timestamp: string }) => {
+    if (!authorList.includes(d.delegator)) {
+      authorList = [...authorList, d.delegator]
+      return true
+    } else {
+      return false
+    }
+  })
+
+  console.log(authorList)
+  console.log(filtered_delegator)
+
+  const fields: { name: string; value: string; inline: boolean }[] = filtered_delegator
+    .filter((r: { delegator: string; vesting_shares: number; timestamp: string }) => {
       return r.vesting_shares !== 0
     })
-    .map((r: any) => {
+    .map((r: { delegator: string; vesting_shares: number; timestamp: string }) => {
       const d = data[1]
       const totalSteems = parseFloat(d.total_vesting_fund_steem.split(' ')[0])
       const totalVests = parseFloat(d.total_vesting_shares.split(' ')[0])
-      const vestingShares = parseFloat(r.vesting_shares)
+      const vestingShares = r.vesting_shares
       let sp = totalSteems * (vestingShares / totalVests)
       return {
         name: `${r.delegator}`,

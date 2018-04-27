@@ -32,20 +32,13 @@ order by
 
 let checkDelegator = (username: string) => `
 SELECT
-  delegator,
-  vesting_shares,
-  timestamp as delegation_date
- FROM TxDelegateVestingShares
- WHERE ID in (
-   SELECT
-     ID as last_delegation_id
-   FROM
-     TxDelegateVestingShares
-   WHERE
-     delegatee = '${username}'
-   )
+  delegator, vesting_shares, timestamp
+FROM
+  TxDelegateVestingShares
+WHERE 
+  delegatee = '${username}'
 ORDER BY
-  vesting_shares DESC
+  timestamp desc
 `
 
 export { searchTag, searchAllTag, checkDelegator }

@@ -16,7 +16,6 @@ let router = async (client: Discord.Client, msg: Discord.Message) => {
   let cmd = args[0]
   // The rest of the command
   args = args.splice(1)
-
   // Router
   switch (cmd) {
     case 'info':
@@ -35,6 +34,9 @@ let router = async (client: Discord.Client, msg: Discord.Message) => {
       sql(client, msg, cmd, args)
       break
     case 'delegator':
+      sql(client, msg, cmd, args)
+      break
+    case 'delegatee':
       sql(client, msg, cmd, args)
       break
     case 'delegate':

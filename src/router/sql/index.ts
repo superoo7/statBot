@@ -1,6 +1,6 @@
 import * as Discord from 'discord.js'
 import executeQuery from './db'
-import { searchTag, searchAllTag, checkDelegator } from './queries'
+import { searchTag, searchAllTag, checkDelegator, checkDelegatee } from './queries'
 import { errorMsg, color } from '../../template'
 import { steem } from '../../steem'
 
@@ -128,9 +128,6 @@ const delegator = async (client: Discord.Client, msg: Discord.Message, username:
     }
   })
 
-  console.log(authorList)
-  console.log(filtered_delegator)
-
   const fields: { name: string; value: string; inline: boolean }[] = filtered_delegator
     .filter((r: { delegator: string; vesting_shares: number; timestamp: string }) => {
       return r.vesting_shares !== 0
@@ -162,4 +159,54 @@ const delegator = async (client: Discord.Client, msg: Discord.Message, username:
   return
 }
 
-export { tag, all, delegator }
+const delegatee =async (client: Discord.Client, msg: Discord.Message, username: string) => {
+  let data: any[] = await Promise.all([
+    await executeQuery(checkDelegatee(username)),
+    await steem.api.getDynamicGlobalPropertiesAsync()
+  ])
+  let authorList: string[] = []
+  const filtered_delegatee: {
+    delegatee: string
+    vesting_shares: number
+    timestamp: string
+  }[] = data[0].filter((d: { delegatee: string; vesting_shares: number; timestamp: string }) => {
+    if (!authorList.includes(d.delegatee)) {
+      authorList = [...authorList, d.delegatee]
+      return true
+    } else {
+      return false
+    }
+  })
+
+  const fields: { name: string; value: string; inline: boolean }[] = filtered_delegatee
+    .filter((r: { delegatee: string; vesting_shares: number; timestamp: string }) => {
+      return r.vesting_shares !== 0
+    })
+    .map((r: { delegatee: string; vesting_shares: number; timestamp: string }) => {
+      const d = data[1]
+      const totalSteems = parseFloat(d.total_vesting_fund_steem.split(' ')[0])
+      const totalVests = parseFloat(d.total_vesting_shares.split(' ')[0])
+      const vestingShares = r.vesting_shares
+      let sp = totalSteems * (vestingShares / totalVests)
+      return {
+        name: `${r.delegatee}`,
+        value: `${r.vesting_shares} Vests\n${sp} SP`,
+        inline: true
+      }
+    })
+
+  msg.channel.send({
+    embed: {
+      color: color.green,
+      description: `Delegatees of ${username}`,
+      fields: fields,
+      timestamp: new Date(),
+      footer: {
+        icon_url: client.user.avatarURL,
+        text: '© superoo7'
+      }
+    }
+  })
+ }) 
+
+export { tag, all, delegator, delegatee }

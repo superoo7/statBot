@@ -41,4 +41,15 @@ ORDER BY
   timestamp desc
 `
 
-export { searchTag, searchAllTag, checkDelegator }
+let checkDelegatee = (username: string) => `
+SELECT
+  delegatee, vesting_shares, timestamp
+FROM
+  TxDelegateVestingShares
+WHERE 
+  delegator = '${username}'
+ORDER BY
+  timestamp desc
+`
+
+export { searchTag, searchAllTag, checkDelegator, checkDelegatee }

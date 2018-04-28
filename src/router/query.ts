@@ -55,6 +55,18 @@ const sql = async (client: Discord.Client, msg: Discord.Message, cmd: string, ar
                 'Details on votes, comments, topics and pending payout of that certain tags in past 7 days'
             },
             {
+              name: `**${TRIGGER}query all <tag_name>** or **${TRIGGER}all <tag_name>**`,
+              value: `Details on votes, comments, topics and pending payout of that certain tags from 01/01/2017`
+            },
+            {
+              name: `**${TRIGGER}query delegator <steem_username>** or **${TRIGGER}delegator <steem_username>**`,
+              value: `Details on delegator to a steem user (Who delegate to you)`
+            },
+            {
+              name: `**${TRIGGER}query delegatee <steem_username>** or **${TRIGGER}delegatee <steem_username>**`,
+              value: `Details on delegatee from a person (Who you delegate to)`
+            },
+            {
               name: `**${TRIGGER}all <tag_name>** or **${TRIGGER}all <tag_name>**`,
               value: `Details on votes, comments, topics and pending payout of that certain tags from 01/01/2017`
             },

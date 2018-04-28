@@ -1,5 +1,11 @@
 # steem-discord bot
 
+Current Version: 2.0.2
+
+# New Feature
+- Check delegators and delegatees
+- Generate link for delegation
+
 # What is this?
 
 This is a discord bot that are able to consume Steem API, search Steem Price, use of SteemSQL.

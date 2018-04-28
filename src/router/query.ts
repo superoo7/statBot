@@ -67,10 +67,6 @@ const sql = async (client: Discord.Client, msg: Discord.Message, cmd: string, ar
               value: `Details on delegatee from a person (Who you delegate to)`
             },
             {
-              name: `**${TRIGGER}all <tag_name>** or **${TRIGGER}all <tag_name>**`,
-              value: `Details on votes, comments, topics and pending payout of that certain tags from 01/01/2017`
-            },
-            {
               name: 'Donation',
               value: 'Consider donate to me for me to sustain this project in terms of server cost.'
             },

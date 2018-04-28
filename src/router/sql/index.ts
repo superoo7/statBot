@@ -159,11 +159,12 @@ const delegator = async (client: Discord.Client, msg: Discord.Message, username:
   return
 }
 
-const delegatee =async (client: Discord.Client, msg: Discord.Message, username: string) => {
+const delegatee = async (client: Discord.Client, msg: Discord.Message, username: string) => {
   let data: any[] = await Promise.all([
     await executeQuery(checkDelegatee(username)),
     await steem.api.getDynamicGlobalPropertiesAsync()
   ])
+
   let authorList: string[] = []
   const filtered_delegatee: {
     delegatee: string
@@ -194,7 +195,6 @@ const delegatee =async (client: Discord.Client, msg: Discord.Message, username: 
         inline: true
       }
     })
-
   msg.channel.send({
     embed: {
       color: color.green,
@@ -207,6 +207,7 @@ const delegatee =async (client: Discord.Client, msg: Discord.Message, username: 
       }
     }
   })
- }) 
+  return
+}
 
 export { tag, all, delegator, delegatee }

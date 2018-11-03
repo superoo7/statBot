@@ -1,4 +1,12 @@
 {
     "editor.tabSize": 2,
     "editor.insertSpaces": true,
+    "editor.formatOnSave": true,
+    "prettier.printWidth": 100,
+    "prettier.semi": false,
+    "prettier.tabWidth": 2,
+    "prettier.useTabs": false,
+    "prettier.singleQuote": true,
+    "prettier.trailingComma": "none",
+    "prettier.disableLanguages": ["markdown"],
 }

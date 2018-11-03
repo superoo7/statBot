@@ -8,6 +8,7 @@ import price from './price'
 import { countRatio } from './coin'
 import convert from './convert'
 import delegate from './delegate'
+import { postStatus } from './steemhunt/status'
 
 let router = async (client: Discord.Client, msg: Discord.Message) => {
   // All the data
@@ -18,6 +19,16 @@ let router = async (client: Discord.Client, msg: Discord.Message) => {
   args = args.splice(1)
   // Router
   switch (cmd) {
+    case 'steemhunt':
+    case 'hunt':
+      if (args.length === 1) {
+        postStatus(msg, args[0], client).catch(() => {
+          errorMsg(msg, `Post not found`)
+        })
+      } else {
+        errorMsg(msg, `Follow the format \`${TRIGGER}${cmd} steemhunt <steemit_URL>\` `)
+      }
+      break
     case 'info':
       info(client, msg)
       break

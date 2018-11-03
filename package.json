@@ -4,8 +4,10 @@
     "build": "tsc"
   },
   "dependencies": {
+    "@types/date-fns": "^2.6.0",
     "axios": "^0.17.1",
     "babel-polyfill": "^6.26.0",
+    "date-fns": "^1.29.0",
     "discord.io": "^2.5.3",
     "discord.js": "^11.2.1",
     "dotenv": "^4.0.0",
@@ -43,9 +45,6 @@
       "no-console": 0,
       "no-unused-var": 1
     }
-  },
-  "engines": {
-    "node": "8.9.2"
   },
   "name": "sww",
   "version": "2.0.0",

@@ -1,6 +1,67 @@
 import * as Discord from 'discord.js'
 import axios from 'axios'
 import { errorMsg, color } from '../../template'
+import * as distanceInWords from 'date-fns/distance_in_words'
+
+// source: https://github.com/Steemhunt/web/blob/4f3c11be8263629183e195f1c9df19c3c8bc0e3e/src/features/User/utils.js
+const influencer: string[] = [
+  'ogochukwu',
+  'elleok',
+  'themanualbot',
+  'chuuuckie',
+  'shaphir',
+  'mobi72',
+  'fruitdaddy',
+  'jonsnow1983',
+  'karamyog',
+  'elsiekjay',
+  'calprut',
+  'ninuola',
+  'sonrhey',
+  'dayjee',
+  'camzy',
+  'abasifreke',
+  'gentleshaid',
+  'aamirijaz',
+  'faithcalls',
+  'tio'
+]
+
+interface IApiData {
+  id: number
+  author: string
+  url: string
+  title: string
+  tagline: string
+  tags: string[]
+  images: { name: string; link: string }[]
+  beneficiaries: any[]
+  permlink: string
+  is_active: boolean
+  payout_value: number
+  active_votes: {
+    voter: string
+    weight: number
+    rshares: string
+    percent: number
+    reputation: string
+    time: string
+  }[]
+  children: number
+  created_at: string
+  updated_at: string
+  description: string
+  is_verified: boolean
+  verified_by: string
+  hunt_score: number
+  valid_votes: {
+    voter: string
+    percent: number
+    weight: number
+    score: number
+  }[]
+  listed_at: number
+}
 
 export const postStatus = async (msg: Discord.Message, args: string, client: Discord.Client) => {
   let authorName, permlinkName
@@ -19,10 +80,13 @@ export const postStatus = async (msg: Discord.Message, args: string, client: Dis
 
     // parse out author and permlink and check wether is correct
     if (authorName.startsWith('@') && permlinkName) {
-      const _apiData: any = await axios.get(
+      const _apiData = await axios.get(
         `https://api.steemhunt.com/posts/${authorName}/${permlinkName}.json`
       )
-      const apiData = _apiData.data
+      const apiData: IApiData = _apiData.data
+      const validVotes = apiData['valid_votes']
+      const influencerVotes = validVotes.filter(d => influencer.indexOf(d.voter) !== -1)
+      const timeago = distanceInWords(new Date(apiData.created_at), new Date(), { addSuffix: true })
       msg.channel.send({
         embed: {
           color: color.green,
@@ -33,7 +97,13 @@ export const postStatus = async (msg: Discord.Message, args: string, client: Dis
             { name: 'Tagline', value: apiData.tagline, inline: true },
             {
               name: 'URL',
-              value: `https://steemhunt.com/${authorName}/${permlinkName}?ref=superoo7`
+              value: `https://steemhunt.com/${authorName}/${permlinkName}?ref=superoo7`,
+              inline: true
+            },
+            {
+              name: 'created',
+              value: timeago,
+              inline: true
             },
             { name: 'Payout', value: `$${apiData.payout_value}`, inline: true },
             { name: 'Vote 👍', value: `${apiData.active_votes.length || '0'}`, inline: true },
@@ -42,6 +112,15 @@ export const postStatus = async (msg: Discord.Message, args: string, client: Dis
               name: 'Verify?',
               value: `${apiData.is_verified ? 'Yes' : 'No'}${
                 apiData.verified_by ? ` by ${apiData.verified_by}` : ''
+              }`,
+              inline: true
+            },
+            {
+              name: 'Influencer Boost?',
+              value: `${
+                influencerVotes.length > 0
+                  ? `Boost by: ${influencerVotes.map(d => d.voter).join(', ')}`
+                  : 'No'
               }`,
               inline: true
             }

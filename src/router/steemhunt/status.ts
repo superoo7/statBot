@@ -23,13 +23,9 @@ export const postStatus = async (msg: Discord.Message, args: string, client: Dis
         `https://api.steemhunt.com/posts/${authorName}/${permlinkName}.json`
       )
       const apiData = _apiData.data
-      console.log(apiData)
       msg.channel.send({
         embed: {
           color: color.green,
-          image: {
-            url: `${apiData.images[0].link}`
-          },
           description: `Data from Steemhunt`,
           fields: [
             { name: 'Author', value: `@${apiData.author}`, inline: true },
@@ -54,7 +50,8 @@ export const postStatus = async (msg: Discord.Message, args: string, client: Dis
           footer: {
             icon_url: client.user.avatarURL,
             text: '© superoo7'
-          }
+          },
+          file: `${apiData.images[0].link}`
         }
       })
     } else {

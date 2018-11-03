@@ -35,15 +35,19 @@ export const postStatus = async (msg: Discord.Message, args: string, client: Dis
             { name: 'Author', value: `@${apiData.author}`, inline: true },
             { name: 'Title', value: `${apiData.title}`, inline: true },
             { name: 'Tagline', value: apiData.tagline, inline: true },
-            {name: 'URL', value: `https://steemhunt.com/${authorName}/${permlinkName}?ref=superoo7`}
+            {
+              name: 'URL',
+              value: `https://steemhunt.com/${authorName}/${permlinkName}?ref=superoo7`
+            },
             { name: 'Payout', value: `$${apiData.payout_value}`, inline: true },
-            // { name: 'Vote 👍', value: `${apiData.active_vote.length}`, inline: true },
-            { name: 'Hunt Score', value: `${apiData.hunt_score}` },
+            { name: 'Vote 👍', value: `${apiData.active_votes.length || '0'}`, inline: true },
+            { name: 'Hunt Score', value: `${apiData.hunt_score}`, inline: true },
             {
               name: 'Verify?',
               value: `${apiData.is_verified ? 'Yes' : 'No'}${
                 apiData.verified_by ? ` by ${apiData.verified_by}` : ''
-              }`
+              }`,
+              inline: true
             }
           ],
           timestamp: new Date(),

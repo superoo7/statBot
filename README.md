@@ -1,20 +1,17 @@
-# steem-discord bot
+# StatBot [Name will be change soon]
 
 Current Version: 2.0.2
 
-# New Feature
-- Check delegators and delegatees
-- Generate link for delegation
+[Join our Discord channel!](https://discord.gg/J99vTUS)
 
 # What is this?
 
-This is a discord bot that are able to consume Steem API, search Steem Price, use of SteemSQL.
+This is a discord bot that are able to consume Steem API, search Steem Price, use of SteemSQL and check steemhunt related stuff.
 
 # To Do
 
-* Check delegators and delegatee
 * Added Test (Jest)
-
+* Prepare new website
 
 ## Function
 
@@ -23,6 +20,13 @@ This is a discord bot that are able to consume Steem API, search Steem Price, us
 * Check a tag on steemit to get the performance in the past 7 days.
 * Check a tag on steemit to get the performance in since 01/01/2017.
 * Generate links for delegation
+* Check Steemhunt post status
+
+## Who uses statBot?
+
+* TeamMalaysia
+* Steemph.Cebu
+* Steemhunt
 
 ## Command
 

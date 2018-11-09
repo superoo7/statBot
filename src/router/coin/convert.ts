@@ -484,6 +484,7 @@ const crypto: { [key: string]: string } = {
   gap: 'gapcoin',
   zaif: 'zaif',
   bata: 'bata',
+  bat: 'basic-attention-token',
   bta: 'bata',
   hempcoin: 'hempcoin',
   thc: 'hempcoin',

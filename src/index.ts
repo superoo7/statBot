@@ -5,7 +5,7 @@ import * as dotenv from 'dotenv'
 import * as sql from 'mssql'
 
 // File
-import { BOT_ID, TRIGGER } from './config'
+import { TRIGGER, APPROVED_CHANNEL } from './config'
 import { infoMsg, errorMsg } from './template'
 import router from './router'
 import price from './router/price'
@@ -33,12 +33,21 @@ client.on('ready', () => {
 // When received message
 
 client.on('message', async msg => {
-  if (BOT_ID === msg.author.id) {
-    logger.info('BOT MESSAGE:', msg.content)
-    return
-  }
+  // Return if is bot
+  if (msg.author.bot) return
+
+  // Check Trigger
   let checkTrigger = msg.content.substring(0, 1)
   if (!(checkTrigger === TRIGGER || checkTrigger === '$')) return
+
+  // Approved channel
+  if (!APPROVED_CHANNEL.includes(msg.channel.id)) {
+    if (msg.content.toLowerCase().split('help').length > 1) {
+      errorMsg(msg, `Please contact admin to implement bot in this channel.`)
+    }
+    return
+  }
+
   if (checkTrigger === '$') {
     const args = msg.content
       .substring(1)

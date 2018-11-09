@@ -58,6 +58,7 @@ let router = async (client: Discord.Client, msg: Discord.Message) => {
     case 'delegate':
       delegate(client, msg, args)
       break
+    case 'q':
     case 'query':
       if (args.length < 1) {
         errorMsg(msg, `Invalid Command, try **${TRIGGER}${cmd} help** to get started`)
@@ -67,6 +68,7 @@ let router = async (client: Discord.Client, msg: Discord.Message) => {
       args = args.slice(1)
       sql(client, msg, cmd, args)
       break
+    case 'p':
     case 'price':
       price(msg, args)
       break
@@ -78,11 +80,12 @@ let router = async (client: Discord.Client, msg: Discord.Message) => {
       price(msg, ['sbd'])
       break
     case 's/sbd':
-      infoMsg(msg, `Steem to SBD ratio is ${await countRatio('steem', 'sbd')}`)
+      convert(client, msg, ['1', 'steem', 'sbd'])
       break
     case 'sbd/s':
-      infoMsg(msg, `SBD to Steem ratio is ${await countRatio('steem', 'sbd')}`)
+      convert(client, msg, ['1', 'sbd', 'steem'])
       break
+    case 'c':
     case 'convert':
       convert(client, msg, args)
       break

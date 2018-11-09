@@ -11,33 +11,22 @@ const convert = async (client: Discord.Client, msg: Discord.Message, args: strin
     const coin2 = args[2].toLowerCase()
     const isCoin1Crypto = coin1 in crypto
     const isCoin2Crypto = coin2 in crypto
-    console.log(`${isCoin1Crypto} ${isCoin2Crypto}`)
     if (isCoin1Crypto && isCoin2Crypto) {
       // Crypto to Crypto
       countRatio(coin1, coin2).then(data => {
-        if (data === 0) {
+        if (!data.price) {
           errorMsg(msg, 'Invalid coin/currency')
         } else {
+          const replyMessage = new Discord.RichEmbed()
+            .setColor(0x00ae86)
+            .setTitle(`${coin1} -> ${coin2}`)
+            .setThumbnail(`${data.images[1]}`)
+            .setImage(`${data.images[0]}`)
+            .addField(`${coin1}`, `${number}`, true)
+            .addField(`${coin2}`, `${data.price * number}`, true)
+
           msg.channel.send({
-            embed: {
-              color: 3447003,
-              description: `${coin1} -> ${coin2}`,
-              fields: [
-                {
-                  name: `${coin1}`,
-                  value: `${number}`
-                },
-                {
-                  name: `${coin2}`,
-                  value: `${data * number}`
-                }
-              ],
-              timestamp: new Date(),
-              footer: {
-                icon_url: client.user.avatarURL,
-                text: '© superoo7'
-              }
-            }
+            embed: replyMessage
           })
         }
       })
@@ -46,29 +35,18 @@ const convert = async (client: Discord.Client, msg: Discord.Message, args: strin
       // crypto, currency
       getOnlyPrice(coin1, coin2)
         .then(data => {
-          if (data === 0) {
+          if (!data.price) {
             errorMsg(msg, 'Invalid coin/currency')
           } else {
+            const replyMessage = new Discord.RichEmbed()
+              .setColor(0x00ae86)
+              .setTitle(`${coin1} -> ${coin2}`)
+              .setThumbnail(`${data.image}`)
+              .addField(`${coin1}`, `${number}`, true)
+              .addField(`${coin2}`, `${data.price * number}`, true)
+
             msg.channel.send({
-              embed: {
-                color: 3447003,
-                description: `${coin1} -> ${coin2}`,
-                fields: [
-                  {
-                    name: `${coin1}`,
-                    value: `${number}`
-                  },
-                  {
-                    name: `${coin2}`,
-                    value: `${data * number}`
-                  }
-                ],
-                timestamp: new Date(),
-                footer: {
-                  icon_url: client.user.avatarURL,
-                  text: '© superoo7'
-                }
-              }
+              embed: replyMessage
             })
           }
         })
@@ -77,29 +55,18 @@ const convert = async (client: Discord.Client, msg: Discord.Message, args: strin
       // Fiat to Crypto
       getOnlyPrice(coin2, coin1)
         .then(data => {
-          if (data === 0) {
+          if (!data.price) {
             msg.reply('Invalid coin/currency')
           } else {
+            const replyMessage = new Discord.RichEmbed()
+              .setColor(0x00ae86)
+              .setTitle(`${coin1} -> ${coin2}`)
+              .setThumbnail(`${data.image}`)
+              .addField(`${coin1}`, `${number}`, true)
+              .addField(`${coin2}`, `${number / data.price}`, true)
+
             msg.channel.send({
-              embed: {
-                color: 3447003,
-                description: `${coin1} -> ${coin2}`,
-                fields: [
-                  {
-                    name: `${coin1}`,
-                    value: `${number}`
-                  },
-                  {
-                    name: `${coin2}`,
-                    value: `${number / data}`
-                  }
-                ],
-                timestamp: new Date(),
-                footer: {
-                  icon_url: client.user.avatarURL,
-                  text: '© superoo7'
-                }
-              }
+              embed: replyMessage
             })
           }
         })

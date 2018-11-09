@@ -1,6 +1,6 @@
 # StatBot [Name will be change soon]
 
-Current Version: 2.1.0
+Current Version: 2.2.0
 
 [Join our Discord channel!](https://discord.gg/J99vTUS)
 
@@ -41,8 +41,9 @@ This is a discord bot that are able to consume Steem API, search Steem Price, us
 |                           `%ping`                          |                            Check ping of the bot                            |
 | `%convert <value> <from coin/currency> <to coin/currency>` | to calculate crypto to fiat from coinmarketcap (e.g. %convert 10 steem myr) |
 |                        `%hunt <url>`                       |                         Check steemhunt post status                         |
-|               `%price <coin>`    or `$<coin>`              |                        Get current price of the coin                        |
+|       `%p <coin>` or  `%price <coin>`    or `$<coin>`      |                        Get current price of the coin                        |
 |    `%delegate <to> <SP>` or `%delegate <from> <to> <SP>`   |                  Generate SteemConnect link for delegation                  |
+|                           `%bugs`                          |                          to report bugs on the bot                          |
 |                         `%discord`                         |                               Join our Discord                              |
 |                           `%info`                          |                         to know more about this bot                         |
 
@@ -69,6 +70,7 @@ Unmantained command
 
 -   Need subscription to SteemSQL (10 SBD/month)
 -   Change `.env.sample` to `.env`
+-   Update `config.ts` file based on your need
 -   Add your own [Discord Token](https://github.com/reactiflux/discord-irc/wiki/Creating-a-discord-bot-&-getting-a-token)
 
 # Feel free to file issue and PR

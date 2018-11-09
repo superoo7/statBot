@@ -1,5 +1,5 @@
 import * as Discord from 'discord.js'
-import { color } from '../template'
+import { color } from '@template'
 import { TRIGGER } from '../config'
 
 const help = async (client: Discord.Client, msg: Discord.Message) => {
@@ -13,16 +13,20 @@ const help = async (client: Discord.Client, msg: Discord.Message) => {
           value: "Bot reply 'pong'."
         },
         {
-          name: `**${TRIGGER}query <query_name> <query_input>**`,
+          name: `**${TRIGGER}hunt <steemit/steemhunt URL>** or **${TRIGGER}steemhunt <steemit/steemhunt URL>**`,
+          value: 'Check steemhunt post status.'
+        },
+        {
+          name: `**${TRIGGER}query <query_name> <query_input>** [DEPRECATED]`,
           value: 'Currentl available operation are tag and all'
         },
         {
-          name: `**${TRIGGER}tag <tag_name>**`,
+          name: `**${TRIGGER}tag <tag_name>** [DEPRECATED]`,
           value:
-            'Details on votes, comments, topics and pending payout of that certain tags in past 7 days'
+            'Details on votes, comments, topics and pending payout of that certain tags in past 7 days [DEPRECATED]'
         },
         {
-          name: `**${TRIGGER}all <tag_name>**`,
+          name: `**${TRIGGER}all <tag_name>** [DEPRECATED]`,
           value: `Details on votes, comments, topics and pending payout of that certain tags from 01/01/2017`
         },
         {

@@ -1,5 +1,5 @@
 import * as Discord from 'discord.js'
-import { color, errorMsg } from '../template'
+import { color, errorMsg } from '@template'
 import { TRIGGER } from '../config'
 
 const delegate = async (client: Discord.Client, msg: Discord.Message, args: string[]) => {

@@ -1,5 +1,5 @@
 import * as Discord from 'discord.js'
-import { color, errorMsg, infoMsg } from '../template'
+import { color, errorMsg, infoMsg } from '@template'
 import { TRIGGER } from '../config'
 import { getOnlyPrice } from './coin'
 

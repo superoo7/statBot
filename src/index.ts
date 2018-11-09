@@ -40,7 +40,10 @@ client.on('message', async msg => {
   let checkTrigger = msg.content.substring(0, 1)
   if (!(checkTrigger === TRIGGER || checkTrigger === '$')) return
   if (checkTrigger === '$') {
-    const args = msg.content.substring(1).split(' ')
+    const args = msg.content
+      .substring(1)
+      .toLowerCase()
+      .split(' ')
     if (args[0].toLowerCase() === 'price') {
       price(msg, args.splice(1))
       return

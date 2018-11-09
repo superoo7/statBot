@@ -1,5 +1,5 @@
 import * as Discord from 'discord.js'
-import { infoMsg, errorMsg } from '../template'
+import { infoMsg, errorMsg } from '@template'
 import info from './info'
 import help from './help'
 import { TRIGGER } from '../config'
@@ -8,16 +8,32 @@ import price from './price'
 import { countRatio } from './coin'
 import convert from './convert'
 import delegate from './delegate'
+import { postStatus } from './steemhunt/status'
 
 let router = async (client: Discord.Client, msg: Discord.Message) => {
   // All the data
-  let args = msg.content.substring(1).split(' ')
+  let args = msg.content
+    .substring(1)
+    .replace(/\n/g, ' ')
+    .toLowerCase()
+    .split(/\s+/)
+
   // Command
   let cmd = args[0]
   // The rest of the command
   args = args.splice(1)
   // Router
   switch (cmd) {
+    case 'steemhunt':
+    case 'hunt':
+      if (args.length === 1) {
+        postStatus(msg, args[0], client).catch(() => {
+          errorMsg(msg, `Post not found`)
+        })
+      } else {
+        errorMsg(msg, `Please follow the format \`${TRIGGER}${cmd} steemhunt <steemit_URL>\` `)
+      }
+      break
     case 'info':
       info(client, msg)
       break

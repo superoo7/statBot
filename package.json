@@ -1,7 +1,8 @@
 {
   "scripts": {
     "dev": "ts-node-dev -r tsconfig-paths/register --files src/index.ts",
-    "build": "tsc"
+    "build": "tsc",
+    "test": "jest"
   },
   "dependencies": {
     "axios": "^0.17.1",
@@ -19,10 +20,11 @@
   "devDependencies": {
     "@types/bytebuffer": "^5.0.37",
     "@types/dotenv": "^4.0.3",
-    "@types/jest": "^22.2.3",
+    "@types/jest": "^23.3.9",
     "@types/mssql": "^4.0.7",
     "@types/node": "^9.6.6",
     "@types/winston": "^2.3.9",
+    "ts-jest": "^23.10.4",
     "ts-node-dev": "^1.0.0-pre.30",
     "tsconfig-paths": "^3.6.0"
   },

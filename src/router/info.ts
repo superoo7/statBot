@@ -13,7 +13,7 @@ const info = (client: Discord.Client, msg: Discord.Message): void => {
         },
         {
           name: 'GitHub Repository',
-          value: 'https://github.com/superoo7/steem-discord'
+          value: 'https://github.com/superoo7/statbot'
         },
         {
           name: 'Donation',

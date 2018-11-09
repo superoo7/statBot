@@ -6,7 +6,7 @@ const help = async (client: Discord.Client, msg: Discord.Message) => {
   await msg.channel.send({
     embed: {
       color: color.green,
-      description: 'BEEP BEEP 🤖, statBot HELP (V2.0.0 beta)',
+      description: 'BEEP BEEP 🤖, statBot HELP (V2.1.0)',
       fields: [
         {
           name: `**${TRIGGER}ping**`,

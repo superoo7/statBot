@@ -1,6 +1,6 @@
 # StatBot [Name will be change soon]
 
-Current Version: 2.0.2
+Current Version: 2.1.0
 
 [Join our Discord channel!](https://discord.gg/J99vTUS)
 
@@ -44,6 +44,7 @@ This is a discord bot that are able to consume Steem API, search Steem Price, us
 |               `%price <coin>`    or `$<coin>`              |                        Get current price of the coin                        |
 |    `%delegate <to> <SP>` or `%delegate <from> <to> <SP>`   |                  Generate SteemConnect link for delegation                  |
 |                         `%discord`                         |                               Join our Discord                              |
+|                           `%info`                          |                         to know more about this bot                         |
 
 ### Others
 
@@ -63,8 +64,6 @@ Unmantained command
 |          `%tag <tag_name>`          | to get details on votes, comments, topics and pending payout of that certain tags in past 7 days |
 |          `%all <tag_name>`          |    Details on votes, comments, topics and pending payout of that certain tags from 01/01/2017    |
 | `%query <query_name> <query_input>` |                           Currentl available operation are tag and all                           |
-
-Type `%info` to know more about this bot
 
 # Developer Part
 

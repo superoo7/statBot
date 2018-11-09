@@ -58,6 +58,7 @@ let router = async (client: Discord.Client, msg: Discord.Message) => {
     case 'delegate':
       delegate(client, msg, args)
       break
+    case 'q':
     case 'query':
       if (args.length < 1) {
         errorMsg(msg, `Invalid Command, try **${TRIGGER}${cmd} help** to get started`)
@@ -67,6 +68,7 @@ let router = async (client: Discord.Client, msg: Discord.Message) => {
       args = args.slice(1)
       sql(client, msg, cmd, args)
       break
+    case 'p':
     case 'price':
       price(msg, args)
       break
@@ -83,6 +85,7 @@ let router = async (client: Discord.Client, msg: Discord.Message) => {
     case 'sbd/s':
       convert(client, msg, ['1', 'sbd', 'steem'])
       break
+    case 'c':
     case 'convert':
       convert(client, msg, args)
       break

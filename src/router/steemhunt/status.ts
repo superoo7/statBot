@@ -26,8 +26,8 @@ export const postStatus = async (msg: Discord.Message, args: string, client: Dis
 
       const apiData: IApiData = _apiData.data
       const img = apiData.images[0].link.endsWith('.mp4')
-        ? { file: `${apiData.images[0].link}` }
-        : { image: { url: `${apiData.images[0].link}` } }
+        ? { file: `${apiData.images[0].link.split(' ').join('%20')}` }
+        : { image: { url: `${apiData.images[0].link.split(' ').join('%20')}` } }
       const validVotes = apiData['valid_votes']
       const influencerVotes = validVotes.filter(d => influencer.indexOf(d.voter) !== -1)
       const createdTime = new Date(apiData.created_at)

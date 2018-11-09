@@ -86,6 +86,17 @@ let router = async (client: Discord.Client, msg: Discord.Message) => {
     case 'convert':
       convert(client, msg, args)
       break
+    case 'discord':
+      infoMsg(msg, `Joing our discord channel`)
+      msg.channel.send(`https://discord.gg/J99vTUS`)
+      break
+    case 'bug':
+    case 'bugs':
+      infoMsg(
+        msg,
+        `You can file bug report on our github https://github.com/superoo7/statbot/issues or join our discord by using \`${TRIGGER}discord\` command`
+      )
+      break
     default:
       errorMsg(msg, `Type **${TRIGGER}help** to get started`)
       break

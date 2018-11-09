@@ -27,7 +27,7 @@
     "tsconfig-paths": "^3.6.0"
   },
   "name": "sww",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "main": "src/index.ts",
   "license": "MIT"
 }

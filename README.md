@@ -1,6 +1,6 @@
 # StatBot [Name will be change soon]
 
-Current Version: 2.2.0
+Current Version: 2.3.0
 
 [Join our Discord channel!](https://discord.gg/J99vTUS)
 

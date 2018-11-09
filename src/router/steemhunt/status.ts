@@ -1,6 +1,6 @@
 import * as Discord from 'discord.js'
 import axios from 'axios'
-import { errorMsg, color } from '../../template'
+import { errorMsg, color } from '@template'
 import * as distanceInWords from 'date-fns/distance_in_words'
 import { influencer, IApiData } from './types'
 
@@ -15,19 +15,25 @@ export const postStatus = async (msg: Discord.Message, args: string, client: Dis
       permlinkCounter = idx
       return lnk.startsWith('@')
     })
-    permlinkName = permlinkCounter < splittedLink.length ? splittedLink[permlinkCounter] : undefined
+    permlinkName =
+      permlinkCounter < splittedLink.length ? splittedLink[permlinkCounter + 1] : undefined
 
     // parse out author and permlink and check wether is correct
     if (authorName && permlinkName) {
       const _apiData = await axios.get(
         `https://api.steemhunt.com/posts/${authorName}/${permlinkName}.json`
       )
+
       const apiData: IApiData = _apiData.data
+      const img = apiData.images[0].link.endsWith('.mp4')
+        ? { file: `${apiData.images[0].link}` }
+        : { image: { url: `${apiData.images[0].link}` } }
       const validVotes = apiData['valid_votes']
       const influencerVotes = validVotes.filter(d => influencer.indexOf(d.voter) !== -1)
       const timeago = distanceInWords(new Date(apiData.created_at), new Date(), { addSuffix: true })
       msg.channel.send({
         embed: {
+          ...img,
           color: color.green,
           description: `Data from Steemhunt`,
           fields: [
@@ -68,8 +74,7 @@ export const postStatus = async (msg: Discord.Message, args: string, client: Dis
           footer: {
             icon_url: client.user.avatarURL,
             text: '© superoo7'
-          },
-          file: `${apiData.images[0].link}`
+          }
         }
       })
     } else {

@@ -1,5 +1,5 @@
 import * as Discord from 'discord.js'
-import { infoMsg, errorMsg } from '../template'
+import { infoMsg, errorMsg } from '@template'
 import info from './info'
 import help from './help'
 import { TRIGGER } from '../config'
@@ -16,7 +16,7 @@ let router = async (client: Discord.Client, msg: Discord.Message) => {
     .substring(1)
     .replace(/\n/g, ' ')
     .toLowerCase()
-    .split(' ')
+    .split(/\s+/)
 
   // Command
   let cmd = args[0]
@@ -31,7 +31,7 @@ let router = async (client: Discord.Client, msg: Discord.Message) => {
           errorMsg(msg, `Post not found`)
         })
       } else {
-        errorMsg(msg, `Follow the format \`${TRIGGER}${cmd} steemhunt <steemit_URL>\` `)
+        errorMsg(msg, `Please follow the format \`${TRIGGER}${cmd} steemhunt <steemit_URL>\` `)
       }
       break
     case 'info':

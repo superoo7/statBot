@@ -1,8 +1,8 @@
 import * as Discord from 'discord.js'
 import executeQuery from './db'
 import { searchTag, searchAllTag, checkDelegator, checkDelegatee } from './queries'
-import { errorMsg, color } from '../../template'
-import { steem } from '../../steem'
+import { errorMsg, color } from '@template'
+import { steem } from '@steem'
 
 let tag = async (client: Discord.Client, msg: Discord.Message, tag: string) => {
   let result: any = await executeQuery(searchTag(tag)).catch(() => {
@@ -111,7 +111,7 @@ let all = async (client: Discord.Client, msg: Discord.Message, tag: string) => {
 const delegator = async (client: Discord.Client, msg: Discord.Message, username: string) => {
   let data: any[] = await Promise.all([
     await executeQuery(checkDelegator(username)),
-    await steem.api.getDynamicGlobalPropertiesAsync()
+    await steem.database.getDynamicGlobalProperties()
   ])
 
   let authorList: string[] = []
@@ -162,7 +162,7 @@ const delegator = async (client: Discord.Client, msg: Discord.Message, username:
 const delegatee = async (client: Discord.Client, msg: Discord.Message, username: string) => {
   let data: any[] = await Promise.all([
     await executeQuery(checkDelegatee(username)),
-    await steem.api.getDynamicGlobalPropertiesAsync()
+    await steem.database.getDynamicGlobalProperties()
   ])
 
   let authorList: string[] = []

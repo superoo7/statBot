@@ -1,5 +1,5 @@
 import * as Discord from 'discord.js'
-import { color } from '../template'
+import { color } from '@template'
 
 const info = (client: Discord.Client, msg: Discord.Message): void => {
   msg.channel.send({

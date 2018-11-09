@@ -1,7 +1,5 @@
-import * as steem from 'steem'
+import { Client } from 'dsteem/lib'
 
-steem.api.setOptions({
-  url: 'wss://gtg.steem.house:8090'
-})
+const steem = new Client("https://api.steemit.com")
 
 export { steem }

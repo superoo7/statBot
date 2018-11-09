@@ -5,22 +5,20 @@ import * as distanceInWords from 'date-fns/distance_in_words'
 import { influencer, IApiData } from './types'
 
 export const postStatus = async (msg: Discord.Message, args: string, client: Discord.Client) => {
-  let authorName, permlinkName
+  let authorName: string | undefined, permlinkName: string | undefined
+  let permlinkCounter: number = 0
   let link = args.match(/(https?:\/\/[^\s]+)/g)
   if (!!link && link.length === 1) {
     const splittedLink = link[0].split(/[\/#]/)
-    if (splittedLink[3].startsWith('@')) {
-      // Steemhunt link
-      authorName = splittedLink[3]
-      permlinkName = splittedLink[4]
-    } else {
-      // Steemit link
-      authorName = splittedLink[4]
-      permlinkName = splittedLink[5]
-    }
+
+    authorName = splittedLink.find((lnk, idx) => {
+      permlinkCounter = idx
+      return lnk.startsWith('@')
+    })
+    permlinkName = permlinkCounter < splittedLink.length ? splittedLink[permlinkCounter] : undefined
 
     // parse out author and permlink and check wether is correct
-    if (authorName.startsWith('@') && permlinkName) {
+    if (authorName && permlinkName) {
       const _apiData = await axios.get(
         `https://api.steemhunt.com/posts/${authorName}/${permlinkName}.json`
       )

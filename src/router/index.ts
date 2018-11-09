@@ -12,7 +12,12 @@ import { postStatus } from './steemhunt/status'
 
 let router = async (client: Discord.Client, msg: Discord.Message) => {
   // All the data
-  let args = msg.content.substring(1).split(' ')
+  let args = msg.content
+    .substring(1)
+    .replace(/\n/g, ' ')
+    .toLowerCase()
+    .split(' ')
+
   // Command
   let cmd = args[0]
   // The rest of the command

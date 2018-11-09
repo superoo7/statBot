@@ -11,11 +11,16 @@ const price = async (msg: Discord.Message, args: string[]) => {
   let coin = args[0]
   await getOnlyPrice(coin, 'usd')
     .then(price => {
-      if (price === 0) {
+      if (!price.price) {
         errorMsg(msg, `${coin} is not available`)
         return
       } else {
-        infoMsg(msg, `${coin} is at $${price}`)
+        const replyMessage = new Discord.RichEmbed()
+          .setColor(0x00ae86)
+          .setTitle(`${coin} price`)
+          .setThumbnail(`${price.image}`)
+          .addField('Price', `$${price.price}`)
+        msg.channel.send({ embed: replyMessage })
         return
       }
     })

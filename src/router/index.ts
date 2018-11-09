@@ -78,10 +78,10 @@ let router = async (client: Discord.Client, msg: Discord.Message) => {
       price(msg, ['sbd'])
       break
     case 's/sbd':
-      infoMsg(msg, `Steem to SBD ratio is ${await countRatio('steem', 'sbd')}`)
+      convert(client, msg, ['1', 'steem', 'sbd'])
       break
     case 'sbd/s':
-      infoMsg(msg, `SBD to Steem ratio is ${await countRatio('steem', 'sbd')}`)
+      convert(client, msg, ['1', 'sbd', 'steem'])
       break
     case 'convert':
       convert(client, msg, args)

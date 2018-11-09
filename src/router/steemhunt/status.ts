@@ -30,7 +30,12 @@ export const postStatus = async (msg: Discord.Message, args: string, client: Dis
         : { image: { url: `${apiData.images[0].link}` } }
       const validVotes = apiData['valid_votes']
       const influencerVotes = validVotes.filter(d => influencer.indexOf(d.voter) !== -1)
-      const timeago = distanceInWords(new Date(apiData.created_at), new Date(), { addSuffix: true })
+      const createdTime = new Date(apiData.created_at)
+      const timeago = distanceInWords(createdTime, new Date(), { addSuffix: true })
+      const kstTime = createdTime.toLocaleTimeString([], {
+        hour: '2-digit',
+        minute: '2-digit'
+      })
       msg.channel.send({
         embed: {
           ...img,
@@ -47,7 +52,7 @@ export const postStatus = async (msg: Discord.Message, args: string, client: Dis
             },
             {
               name: 'created',
-              value: timeago,
+              value: `${timeago} (${kstTime} KST)`,
               inline: true
             },
             { name: 'Payout', value: `$${apiData.payout_value}`, inline: true },

@@ -1081,7 +1081,6 @@ const crypto: { [key: string]: string } = {
   'evil-coin': 'evil-coin',
   evil: 'evil-coin',
   batcoin: 'batcoin',
-  bat: 'batcoin',
   eurocoin: 'eurocoin',
   euc: 'eurocoin',
   growcoin: 'growcoin',

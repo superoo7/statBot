@@ -1,4 +1,6 @@
-# StatBot [Name will be change soon]
+# StatBot
+
+![StatBot logo](./img/StatBot.png)
 
 Current Version: 2.3.0
 

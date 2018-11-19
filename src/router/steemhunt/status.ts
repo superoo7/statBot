@@ -36,7 +36,7 @@ export const postStatus = async (msg: Discord.Message, args: string, client: Dis
         hour: '2-digit',
         minute: '2-digit'
       })
-      msg.channel.send({
+      msg.author.send({
         embed: {
           ...img,
           color: color.green,
@@ -82,8 +82,16 @@ export const postStatus = async (msg: Discord.Message, args: string, client: Dis
           }
         }
       })
+      msg.delete()
     } else {
-      errorMsg(msg, `Invalid link, please use steemit/steemhunt url`)
+      msg.author.send({
+        embed: {
+          color: color.red,
+          title: 'Invalid link',
+          description: 'please use steemit/steemhunt url'
+        }
+      })
+      msg.delete()
     }
   }
 }

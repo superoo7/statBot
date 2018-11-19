@@ -1,5 +1,5 @@
 import * as Discord from 'discord.js'
-import { infoMsg, errorMsg } from '@template'
+import { infoMsg, errorMsg, color } from '@template'
 import info from './info'
 import help from './help'
 import { TRIGGER } from '../config'
@@ -28,10 +28,24 @@ let router = async (client: Discord.Client, msg: Discord.Message) => {
     case 'hunt':
       if (args.length === 1) {
         postStatus(msg, args[0], client).catch(() => {
-          errorMsg(msg, `Post not found`)
+          msg.author.send({
+            embed: {
+              color: color.red,
+              title: 'Post not found',
+              description: 'Post cannot be found on SteemHunt database'
+            }
+          })
+          msg.delete()
         })
       } else {
-        errorMsg(msg, `Please follow the format \`${TRIGGER}${cmd} steemhunt <steemit_URL>\` `)
+        msg.author.send({
+          embed: {
+            color: color.red,
+            title: 'Invalid format',
+            description: `\`${TRIGGER}${cmd} <steemit_URL>\``
+          }
+        })
+        msg.delete()
       }
       break
     case 'info':

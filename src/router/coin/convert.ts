@@ -1,4 +1,5 @@
 const crypto: { [key: string]: string } = {
+  hunt: 'hunt-token',
   eos: 'eos',
   trx: 'tron',
   '42': '42-coin',
